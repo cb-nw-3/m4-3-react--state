@@ -1,5 +1,7 @@
 # Exercise 1: Initial Structure
 
+As always, start by running `yarn install` to install all dependencies. Then, `yarn start` starts a development server.
+
 This workshop comes with some data - in particular, it's an array of books. Many of them are wonderful, and are worth checking out. Especially for folks who are into sci-fi/fantasy!
 
 Inside our `App.js`, we're importing that data. Check out `data.js` to see what it looks like. We'll want to pass `data.books` down to a new Typeahead component, so that the user can filter through this big list of books and find the one they're looking for.
