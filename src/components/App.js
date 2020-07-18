@@ -29,5 +29,6 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding: 200px;
+  flex-direction: column;
 `;
 export default App;
