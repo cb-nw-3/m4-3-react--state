@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Typeahead = (props) => {
+  const state = useState(0);
+  const count = state[0];
+  const setCount = state[1];
   return (
     <Wrapper>
       <Input></Input>
@@ -19,10 +22,11 @@ const Wrapper = styled.div`
 const Input = styled.input`
   width: 60%;
   height: 2rem;
+  border-radius: 5px;
 `;
 
 const ClearBtn = styled.button`
-  border-radius: 4px;
+  border-radius: 5px;
   background-color: blue;
   color: white;
   border: none;
