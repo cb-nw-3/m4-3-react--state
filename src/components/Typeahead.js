@@ -5,7 +5,13 @@ import Suggestion from "./Suggestion";
 
 const Typeahead = ({ suggestions, categories, handleSelect }) => {
   const [input, setInput] = React.useState("");
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
 
+  const matchedBooks = suggestions.filter((suggestion) =>
+    suggestion.title.toLowerCase().includes(input.toLowerCase())
+  );
   return (
     <Wrapper>
       <SearchArea>
@@ -14,8 +20,20 @@ const Typeahead = ({ suggestions, categories, handleSelect }) => {
           value={input}
           onChange={(ev) => setInput(ev.target.value)}
           onKeyDown={(ev) => {
-            if (ev.key === "Enter") {
-              handleSelect(ev.target.value);
+            switch (ev.key) {
+              case "Enter": {
+                handleSelect(ev.target.value);
+                break;
+              }
+              case "ArrowUp": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                break;
+              }
+              case "ArrowDown": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                console.log(selectedSuggestionIndex);
+                break;
+              }
             }
           }}
         />
@@ -24,26 +42,28 @@ const Typeahead = ({ suggestions, categories, handleSelect }) => {
 
       <SuggestionList>
         {input.length >= 2 &&
-          suggestions
-            .filter((suggestion) =>
-              suggestion.title.toLowerCase().includes(input.toLowerCase())
-            )
-            .map((suggestion) => {
-              const category = categories[suggestion.categoryId];
-              return (
-                <Suggestion
-                  key={suggestion.id}
-                  input={input.toLowerCase()}
-                  book={suggestion}
-                  category={category}
-                  onClick={() => {
-                    handleSelect(suggestion.title);
-                  }}
-                >
-                  {suggestion.title}
-                </Suggestion>
-              );
-            })}
+          matchedBooks.map((suggestion) => {
+            const category = categories[suggestion.categoryId];
+            const index = matchedBooks.indexOf(suggestion);
+
+            const isSelected = index === selectedSuggestionIndex;
+            return (
+              <Suggestion
+                key={suggestion.id}
+                input={input.toLowerCase()}
+                book={suggestion}
+                category={category}
+                index={index}
+                isSelected={isSelected}
+                onClick={() => {
+                  handleSelect(suggestion.title);
+                }}
+                onMouseEnter={() => setSelectedSuggestionIndex(index)}
+              >
+                {suggestion.title}
+              </Suggestion>
+            );
+          })}
       </SuggestionList>
     </Wrapper>
   );

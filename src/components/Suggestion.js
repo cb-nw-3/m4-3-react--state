@@ -1,7 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-const Suggestion = ({ book, input, category, onClick }) => {
+const Suggestion = ({
+  book,
+  input,
+  category,
+  isSelected,
+  onClick,
+  onMouseEnter,
+}) => {
   let cutIndex =
     book.title.toLowerCase().search(input.toLowerCase()) + input.length;
 
@@ -9,7 +16,11 @@ const Suggestion = ({ book, input, category, onClick }) => {
   const secondHalf = book.title.slice(cutIndex);
 
   return (
-    <Wrapper onClick={onClick}>
+    <Wrapper
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      style={{ background: isSelected ? "lightyellow" : "transparent" }}
+    >
       <span>
         {firstHalf}
         <Prediction>{secondHalf}</Prediction>
@@ -21,10 +32,6 @@ const Suggestion = ({ book, input, category, onClick }) => {
 
 const Wrapper = styled.li`
   padding: 5px;
-
-  &:hover {
-    background-color: yellow;
-  }
 `;
 
 const Prediction = styled.span`
