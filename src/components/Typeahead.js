@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import Suggestion from "./Suggestion";
 
-const Typeahead = ({ suggestions, handleSelect }) => {
+const Typeahead = ({ suggestions, categories, handleSelect }) => {
   const [input, setInput] = React.useState("");
 
   return (
@@ -28,16 +28,22 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             .filter((suggestion) =>
               suggestion.title.toLowerCase().includes(input.toLowerCase())
             )
-            .map((suggestion) => (
-              <Suggestion
-                book={suggestion}
-                onClick={() => {
-                  handleSelect(suggestion.title);
-                }}
-              >
-                {suggestion.title}
-              </Suggestion>
-            ))}
+            .map((suggestion) => {
+              const category = categories[suggestion.categoryId];
+              return (
+                <Suggestion
+                  key={suggestion.id}
+                  input={input.toLowerCase()}
+                  book={suggestion}
+                  category={category}
+                  onClick={() => {
+                    handleSelect(suggestion.title);
+                  }}
+                >
+                  {suggestion.title}
+                </Suggestion>
+              );
+            })}
       </SuggestionList>
     </Wrapper>
   );
