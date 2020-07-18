@@ -6,32 +6,68 @@ import Suggestion from "./Suggestion";
 const Typeahead = ({ suggestions, categories, handleSelect }) => {
   const [input, setInput] = React.useState("");
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
-    0
+    -1
   );
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = React.useState(false);
 
-  const matchedBooks = suggestions.filter((suggestion) =>
-    suggestion.title.toLowerCase().includes(input.toLowerCase())
-  );
+  let matchedBooks = [];
+
+  if (input.length >= 2) {
+    matchedBooks = suggestions.filter((suggestion) =>
+      suggestion.title.toLowerCase().includes(input.toLowerCase())
+    );
+  }
+
+  const showSuggestions = matchedBooks.length >= 1 && isSuggestionsOpen;
+
   return (
     <Wrapper>
       <SearchArea>
         <Input
           type="text"
           value={input}
-          onChange={(ev) => setInput(ev.target.value)}
+          onChange={(ev) => {
+            setInput(ev.target.value);
+            if (ev.target.value.length >= 2 && !isSuggestionsOpen) {
+              setIsSuggestionsOpen(true);
+            }
+          }}
           onKeyDown={(ev) => {
             switch (ev.key) {
               case "Enter": {
-                handleSelect(ev.target.value);
+                if (selectedSuggestionIndex === -1) {
+                  handleSelect(ev.target.value);
+                } else {
+                  handleSelect(matchedBooks[selectedSuggestionIndex].title);
+                }
+
                 break;
               }
               case "ArrowUp": {
-                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                if (matchedBooks.length >= 1) {
+                  if (selectedSuggestionIndex === -1) {
+                    break;
+                  }
+                  setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                  console.log(selectedSuggestionIndex);
+                }
                 break;
               }
               case "ArrowDown": {
-                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
-                console.log(selectedSuggestionIndex);
+                if (matchedBooks.length >= 1) {
+                  if (selectedSuggestionIndex === matchedBooks.length - 1) {
+                    break;
+                  }
+                  setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                  console.log(selectedSuggestionIndex);
+                }
+                break;
+              }
+              case "Escape": {
+                if (isSuggestionsOpen) {
+                  setIsSuggestionsOpen(false);
+                  console.log("escape: ", isSuggestionsOpen);
+                }
                 break;
               }
             }
@@ -41,7 +77,7 @@ const Typeahead = ({ suggestions, categories, handleSelect }) => {
       </SearchArea>
 
       <SuggestionList>
-        {input.length >= 2 &&
+        {showSuggestions &&
           matchedBooks.map((suggestion) => {
             const category = categories[suggestion.categoryId];
             const index = matchedBooks.indexOf(suggestion);
