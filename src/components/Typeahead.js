@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Typeahead= ({suggestions, handleSelect, categories}) => {
+const Typeahead= ({suggestions, handleSelect}) => {
   const [value, setValue] = React.useState('');
   const matchedSuggestions = suggestions.filter(suggestion =>suggestion.title.toLowerCase().includes(value.toLowerCase())
   );
-  const splitSuggestion = value.slice(0,value.length);
-  console.log(splitSuggestion);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
+  const [isSelected, setIsSelected] = React.useState(false);
   return (
       <Container>
       <Wrapper>
@@ -15,19 +15,44 @@ const Typeahead= ({suggestions, handleSelect, categories}) => {
         value={value}
         onChange={(ev) => setValue(ev.target.value)}
         onKeyDown={(ev) => {
-            if (ev.key === 'Enter') {
+            switch (ev.key) {
+              case 'Enter': {
                 handleSelect(ev.target.value);
+                return;
+              }
+              case 'ArrowUp': {
+                setSelectedSuggestionIndex(selectedSuggestionIndex -1);
+                return;
+              }
+              case 'ArrowDown': {
+                setSelectedSuggestionIndex(selectedSuggestionIndex +1);
+                return;
+              }
             }
         }}
       />
       <ClearButton onClick={() => setValue('')}>Clear</ClearButton>
       <SuggestionList>
           {value.length >= 2 && matchedSuggestions.map((suggestion) => {
-            //   console.log(suggestion.title.slice(0 ,suggestion.title.toLowerCase().indexOf(value)+ value.length + 1),suggestion.title.slice(suggestion.title.toLowerCase().indexOf(value) + value.length + 1));
               return (
                 <Suggestion 
                   key={suggestion.id}
+                  style={{
+                      background: isSelected ? 'hsla(50deg, 100%, 80%, 0.25)' : 'transparent',
+                  }}
                   onClick={() => handleSelect(suggestion.title)}
+                  onMouseEnter={(ev) => {
+                      switch(ev) {
+                        case 'selected': {
+                          setIsSelected(isSelected);
+                          return;
+                        }
+                        case 'not selected': {
+                            setIsSelected(!isSelected);
+                            return;
+                        }
+                      }
+                  }}
                 >
                   <span>
                     {suggestion.title.slice(0 ,suggestion.title.toLowerCase().indexOf(value)+ value.length)}
@@ -42,7 +67,6 @@ const Typeahead= ({suggestions, handleSelect, categories}) => {
       </Container>
   )
 }
-
 const Container = styled.div`
   position: relative;
 `;
