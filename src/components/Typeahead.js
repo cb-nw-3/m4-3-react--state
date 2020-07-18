@@ -35,6 +35,7 @@ const Typeahead = ({ suggestions, categories, handleSelect }) => {
           onKeyDown={(ev) => {
             switch (ev.key) {
               case "Enter": {
+                ev.preventDefault();
                 if (selectedSuggestionIndex === -1) {
                   handleSelect(ev.target.value);
                 } else {
@@ -44,29 +45,28 @@ const Typeahead = ({ suggestions, categories, handleSelect }) => {
                 break;
               }
               case "ArrowUp": {
+                ev.preventDefault();
                 if (matchedBooks.length >= 1) {
                   if (selectedSuggestionIndex === -1) {
                     break;
                   }
                   setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
-                  console.log(selectedSuggestionIndex);
                 }
                 break;
               }
               case "ArrowDown": {
+                ev.preventDefault();
                 if (matchedBooks.length >= 1) {
                   if (selectedSuggestionIndex === matchedBooks.length - 1) {
                     break;
                   }
                   setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
-                  console.log(selectedSuggestionIndex);
                 }
                 break;
               }
               case "Escape": {
                 if (isSuggestionsOpen) {
                   setIsSuggestionsOpen(false);
-                  console.log("escape: ", isSuggestionsOpen);
                 }
                 break;
               }
