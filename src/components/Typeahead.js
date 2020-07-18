@@ -60,9 +60,17 @@ const ClearButton = styled.button`
 const SuggestionList = styled.ul`
   display:block;
   text-decoration: none;
+  & :last-child {
+      padding-top: 3px;
+      padding-bottom: 0px;
+      border-bottom: none;
+  }
 `
 const Suggestion = styled.li`
   text-decoration: none;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid grey;
 
   &:hover{
       background-color: #f7e890;
