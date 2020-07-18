@@ -16,6 +16,8 @@ const Typeahead = ({ suggestions, handleSelect }) => {
       return book;
     }
   });
+
+  let isMatchedBookArrayFull = matchedBookArray.length > 0;
   return (
     <>
       <div>
@@ -39,18 +41,20 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           Clear
         </StyledButton>
       </div>
-      <DropDown>
-        {matchedBookArray.map((book, index) => {
-          return (
-            <Suggestion
-              key={book + index}
-              onClick={() => handleSelect(book.title)}
-            >
-              {book.title}
-            </Suggestion>
-          );
-        })}
-      </DropDown>
+      {isMatchedBookArrayFull && (
+        <DropDown>
+          {matchedBookArray.map((book, index) => {
+            return (
+              <Suggestion
+                key={book + index}
+                onClick={() => handleSelect(book.title)}
+              >
+                {book.title}
+              </Suggestion>
+            );
+          })}
+        </DropDown>
+      )}
     </>
   );
 };
