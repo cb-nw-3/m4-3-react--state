@@ -14,6 +14,7 @@ const App = (props) => {
           handleSelect={(suggestion) => {
           window.alert(suggestion)
           }}
+          categories={data.categories}
         />
     </>
   );
