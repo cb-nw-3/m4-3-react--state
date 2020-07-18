@@ -9,22 +9,18 @@ const App = (props) => {
   return (
     <>
       <GlobalStyles />
-      <Wrapper>
         <Typeahead 
           suggestions={data.books}
           handleSelect={(suggestion) => {
           window.alert(suggestion)
           }}
         />
-      </Wrapper>
-      
     </>
   );
 };
 
 const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
+  text-align: center;
   margin-top: 100px;
 `;
 
