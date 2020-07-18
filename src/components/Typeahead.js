@@ -19,9 +19,9 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             type="text" 
             value={value}
             onChange = {(event => setValue(event.target.value))}
-
+            onKeyDown = {(event => console.log(event.key))}
           />
-          {console.log(value)}
+          {/* {console.log(value)} */}
           <Clear onClick = {() => setValue('')}>Clear</Clear>
       </InputContainer>
 
@@ -63,7 +63,7 @@ const Input = styled.input`
 
 const Clear = styled.button`
   width: 100px;
-  margin-left: 5px;
+  margin-left: 10px;
   border-radius: 10px;
   color: white;
   font-size: 22px;
