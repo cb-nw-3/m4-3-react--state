@@ -56,5 +56,5 @@ const Typeahead = ({ suggestions, handleSelect }) => {
     </div>
   );
 };
-
+//
 export default Typeahead;
