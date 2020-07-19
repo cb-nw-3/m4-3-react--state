@@ -19,8 +19,14 @@ const StyledButton = styled.button`
   border-radius: 3px;
 `;
 
-const Typeahead = ({ data, handleSelect }) => {
+const Typeahead = ({ suggestions, handleSelect }) => {
   const [value, setValue] = React.useState("");
+
+  const renderedSuggestions = suggestions.filter(
+    (suggestion) =>
+      suggestion.title.toLowerCase().includes(value.toLowerCase()) &&
+      value.length > 1
+  );
 
   return (
     <div>
@@ -35,9 +41,18 @@ const Typeahead = ({ data, handleSelect }) => {
             handleSelect(ev.target.value);
           }
         }}
-        placeholder="The designs"
+        placeholder="Enter a book title"
       />
       <StyledButton onClick={() => setValue("")}>Clear</StyledButton>
+      <ul>
+        {renderedSuggestions.map((suggestion) => {
+          return (
+            <li key={suggestion.id} onClick={handleSelect(suggestion.title)}>
+              {suggestion.title}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
