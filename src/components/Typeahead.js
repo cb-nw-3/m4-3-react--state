@@ -19,7 +19,7 @@ const StyledButton = styled.button`
   border-radius: 3px;
 `;
 
-const Typeahead = ({ suggestions, handleSelect }) => {
+const Typeahead = ({ suggestions, handleSelect, categories }) => {
   const [value, setValue] = React.useState("");
 
   const renderedSuggestions = suggestions.filter(
@@ -27,6 +27,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
       suggestion.title.toLowerCase().includes(value.toLowerCase()) &&
       value.length > 1
   );
+  let prediction;
 
   return (
     <div>
@@ -46,9 +47,12 @@ const Typeahead = ({ suggestions, handleSelect }) => {
       <StyledButton onClick={() => setValue("")}>Clear</StyledButton>
       <ul>
         {renderedSuggestions.map((suggestion) => {
+          prediction = suggestion.title.slice(value.length);
+
           return (
             <li key={suggestion.id} onClick={handleSelect(suggestion.title)}>
-              {suggestion.title}
+              <span>{value}</span>
+              <span style={{ fontWeight: "bold" }}>{prediction}</span>
             </li>
           );
         })}
@@ -56,5 +60,5 @@ const Typeahead = ({ suggestions, handleSelect }) => {
     </div>
   );
 };
-//
+
 export default Typeahead;

@@ -4,7 +4,7 @@ import GlobalStyles from "./GlobalStyles";
 import styled from "styled-components";
 import Typeahead from "./Typeahead";
 
-const { books } = data;
+const { books, categories } = data;
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -23,6 +23,7 @@ const App = (props) => {
         handleSelect={(suggestion) => {
           console.log("xxxx");
         }}
+        categories={categories}
       />
     </Wrapper>
   );
