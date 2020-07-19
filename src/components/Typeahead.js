@@ -27,7 +27,6 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
       suggestion.title.toLowerCase().includes(value.toLowerCase()) &&
       value.length > 1
   );
-  let prediction;
 
   return (
     <div>
@@ -47,12 +46,25 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
       <StyledButton onClick={() => setValue("")}>Clear</StyledButton>
       <ul>
         {renderedSuggestions.map((suggestion) => {
-          prediction = suggestion.title.slice(value.length);
+          const prediction = suggestion.title.slice(value.length);
+
+          const category = categories[suggestion.categoryId].name;
+
+          console.log("category", category);
 
           return (
             <li key={suggestion.id} onClick={handleSelect(suggestion.title)}>
               <span>{value}</span>
               <span style={{ fontWeight: "bold" }}>{prediction}</span>
+              <br />
+              <span
+                style={{
+                  fontStyle: "italic",
+                  color: "purple",
+                }}
+              >
+                {category}
+              </span>
             </li>
           );
         })}
