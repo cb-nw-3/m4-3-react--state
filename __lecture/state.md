@@ -307,6 +307,44 @@ render(<App />);
 
 ---
 
+const FavouriteFood = ({ food, setFood }) => {
+ 
+  return (
+    <>
+      <label>
+        <input
+          type="radio"
+          name="food"
+          value="pizza"
+          checked={food === 'pizza'}
+          onChange={() => setFood('pizza')}
+        />
+        Pizza
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="food"
+          value="broccoli"
+          checked={food === 'broccoli'}
+          onChange={() => setFood('broccoli')}
+        />
+        Broccoli
+      </label>
+    </>
+  )
+};
+const App = () => {
+ const [food, setFood] = React.useState('');
+
+  return (
+    <>
+      <p>My favourite food is: {food}</p>
+      <FavouriteFood />
+    </>
+  )
+}
+render(<App />)
 ### Conditional rendering
 
 ---
@@ -326,3 +364,5 @@ render(<App />);
   );
 };
 ```
+
+
