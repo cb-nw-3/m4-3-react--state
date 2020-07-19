@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledInput = styled.input`
   height: 30px;
-  width: 250px;
+  width: 300px;
   border: 1px solid gainsboro;
   border-radius: 3px;
   padding-left: 10px;
@@ -11,12 +11,21 @@ const StyledInput = styled.input`
 
 const StyledButton = styled.button`
   height: 30px;
-  width: 80px;
+  width: 100px;
   margin-left: 10px;
   border: none;
   color: #fff;
   background-color: #2800d1;
   border-radius: 3px;
+`;
+
+const StyledUl = styled.ul`
+  width: 410px;
+  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.1);
+`;
+
+const StyledLi = styled.li`
+  padding: 10px;
 `;
 
 const Typeahead = ({ suggestions, handleSelect, categories }) => {
@@ -44,31 +53,35 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
         placeholder="Enter a book title"
       />
       <StyledButton onClick={() => setValue("")}>Clear</StyledButton>
-      <ul>
+      <StyledUl>
         {renderedSuggestions.map((suggestion) => {
+          const userInput = suggestion.title.slice(0, value.length);
           const prediction = suggestion.title.slice(value.length);
 
           const category = categories[suggestion.categoryId].name;
 
-          console.log("category", category);
-
-          return (
-            <li key={suggestion.id} onClick={handleSelect(suggestion.title)}>
-              <span>{value}</span>
-              <span style={{ fontWeight: "bold" }}>{prediction}</span>
-              <br />
-              <span
-                style={{
-                  fontStyle: "italic",
-                  color: "purple",
-                }}
+          if (value.length > 1) {
+            return (
+              <StyledLi
+                key={suggestion.id}
+                onClick={handleSelect(suggestion.title)}
               >
-                {category}
-              </span>
-            </li>
-          );
+                <span>{userInput}</span>
+                <span style={{ fontWeight: "bold" }}>{prediction}</span>
+                <span
+                  style={{
+                    fontStyle: "italic",
+                    color: "purple",
+                  }}
+                >
+                  <span style={{ color: "#000" }}>{` in `}</span>
+                  {category}
+                </span>
+              </StyledLi>
+            );
+          }
         })}
-      </ul>
+      </StyledUl>
     </div>
   );
 };
