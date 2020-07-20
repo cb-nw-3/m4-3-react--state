@@ -46,8 +46,14 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
           setValue(ev.target.value);
         }}
         onKeyDown={(ev) => {
-          if (ev.key === "Enter") {
-            handleSelect(ev.target.value);
+          console.log(ev.key);
+          switch (ev.key === "Enter") {
+            case "Enter":
+              handleSelect(ev.target.value);
+              break;
+            case "ArrowDown":
+              //do something
+              break;
           }
         }}
         placeholder="Enter a book title"
@@ -55,8 +61,14 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
       <StyledButton onClick={() => setValue("")}>Clear</StyledButton>
       <StyledUl>
         {renderedSuggestions.map((suggestion) => {
-          const userInput = suggestion.title.slice(0, value.length);
-          const prediction = suggestion.title.slice(value.length);
+          const index = suggestion.title
+            .toLowerCase()
+            .indexOf(value.toLowerCase());
+
+          const end = index + value.length;
+
+          const firstHalf = suggestion.title.slice(0, index);
+          const secondHalf = suggestion.title.slice(end);
 
           const category = categories[suggestion.categoryId].name;
 
@@ -66,8 +78,9 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
                 key={suggestion.id}
                 onClick={handleSelect(suggestion.title)}
               >
-                <span>{userInput}</span>
-                <span style={{ fontWeight: "bold" }}>{prediction}</span>
+                <span style={{ fontWeight: "bold" }}>{firstHalf}</span>
+                <span>{value}</span>
+                <span style={{ fontWeight: "bold" }}>{secondHalf}</span>
                 <span
                   style={{
                     fontStyle: "italic",
