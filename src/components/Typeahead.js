@@ -5,25 +5,30 @@ const Typeahead = ({ suggestions, handleSelect }) => {
 
   const [value, setValue] = React.useState('');
 
+  const matchedSuggestions = suggestions.filter(suggestion => (     
+      suggestion.title.toLowerCase().includes(value.toLowerCase())
+    )  
+  );
+
+
   return(
     <Wrapper>
-      {/* {This was just to show that i can access the books} */}
-      {/* <select> 
-        <option selected="selected" disabled="disabled">Choose a book</option>
-      {suggestions.map(book => (
-        <option>{book.title}</option>
-      ))}
-      </select> */}
       <InputContainer>
         <Input 
             type="text" 
             value={value}
             onChange = {(event => setValue(event.target.value))}
-            onKeyDown = {(event => console.log(event.key))}
+            //onKeyDown = {(event => console.log(event.key))}
           />
-          {/* {console.log(value)} */}
           <Clear onClick = {() => setValue('')}>Clear</Clear>
       </InputContainer>
+      <SearchResultList>
+          {value.length > 2 && matchedSuggestions.map(match => (
+                <SearchResultItem>
+                  {match.title}
+                </SearchResultItem>
+              ))}
+      </SearchResultList>
 
 
     </Wrapper>
@@ -36,28 +41,31 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  border: 5px solid goldenrod;
+  margin-top: 50px;
 `;
 
 const InputContainer = styled.div`
   display: flex;
   /* border: 1px solid goldenrod; */
-  padding: 50px;
+
+  /* padding: 50px; */
   border-radius: 12px;
-  box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.1); */
+  
 `;
 
 const Input = styled.input`
-  width: 500px;
+  width: 400px;
   height: 50px;
   font-size: 22px;
   outline: none;
-  border: 2px solid grey;
+  border: 2px solid lightgray;
   border-radius: 12px;
 
   &:focus {
     /* background: salmon; */
+    outline: 2px solid dodgerblue;
+    box-shadow: 0 0 3px dodgerblue;
   }
 `;
 
@@ -80,6 +88,38 @@ const Clear = styled.button`
   &:active {
     transform: scale(0.95);
   }
+`;
+
+const SearchResultList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 10px 0;
+  padding: 0;
+
+  width: 500px;
+  /* border: 1px solid goldenrod; */
+  box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.1);
+  
+  &:after {
+    /* padding: 15px; */
+  }
+
+  & li {
+    width: 100%;
+    line-height: 1.6;
+    padding: 15px;
+    font-weight: 600;
+  }
+
+  & li:first-child {
+    background: lightyellow;
+  }
+`;
+
+const SearchResultItem = styled.li`
+  
 `;
 
 export default Typeahead;
