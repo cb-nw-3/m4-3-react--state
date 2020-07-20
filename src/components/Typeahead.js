@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import MatchFormatter from './MatchFormatter';
 
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [value, setValue] = useState('');
@@ -8,26 +9,6 @@ const Typeahead = ({ suggestions, handleSelect }) => {
   } else {
     matchedSuggestions = suggestions.filter((book) =>
       book.title.toLowerCase().includes(value.toLowerCase())
-    );
-  }
-
-  function matchFormatter(title, stringSearched = '') {
-    const index = title.toLowerCase().indexOf(stringSearched);
-    console.log(
-      `title: ${title} ${typeof title} index: ${index} string ${stringSearched}`
-    );
-    const firstHalf = title.slice(0, index - 1);
-    const secondHalf = title.slice(index - 1);
-    const Bold = styled.span`
-      font-weight: bold;
-      font-style: italic;
-    `;
-
-    return (
-      <>
-        <span>{firstHalf}</span>
-        <Bold>{secondHalf}</Bold>
-      </>
     );
   }
 
@@ -61,7 +42,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
               handleSelect(matchedSuggestions[index].title);
             }}
           >
-            {matchFormatter(element.title, value)}
+            <MatchFormatter book={element} string={value} />
           </Suggestion>
         ))}
       </Ul>
