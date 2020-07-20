@@ -1,24 +1,29 @@
 import React from 'react';
 
 import styled from 'styled-components';
+import Component from './Component';
+import data from '../data';
 
 function TypeAhead(props) {
   const [value, setValue] = React.useState(null);
 
   return <InputContainer>
-    <StyledInput 
-      type="text"
-      value={value}
-      onChange={(ev) => {
-        setValue(ev.target.value);
-      }}
-      onKeyDown={(ev) => {
-        if (ev.key === 'Enter') {
-          alert(ev.target.value)
-          // handleSelect(ev.target.value);
-        }
-      }}
-    ></StyledInput>
+    <ComponentContainer>
+      <StyledInput 
+        type="text"
+        value={value}
+        onChange={(ev) => {
+          setValue(ev.target.value);
+        }}
+        onKeyDown={(ev) => {
+          if (ev.key === 'Enter') {
+            alert(ev.target.value)
+            // handleSelect(ev.target.value);
+          }
+        }}
+      ></StyledInput>
+      <Component data={data.books} value={value}></Component>
+    </ComponentContainer>
     <ClearButton onClick={() => setValue('')}>Clear</ClearButton>
   </InputContainer>
 }
@@ -33,7 +38,7 @@ const InputContainer = styled.div`
 `
 const StyledInput = styled.input`
   height: 30px;
-  width: 240px;
+  width: 300px;
   border-radius: 5px;
 `
 const ClearButton = styled.button`
@@ -44,6 +49,10 @@ const ClearButton = styled.button`
   border-radius: 5px;
   color: white;
   margin-left: 20px;
+`
+const ComponentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 export default TypeAhead;
