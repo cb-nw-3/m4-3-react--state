@@ -1,31 +1,54 @@
 import React from "react";
 import styled from "styled-components";
 
+import Suggestion from "./Suggestion";
+
 function Typeahead({ suggestions }) {
   console.log("Typeahead");
   console.log(suggestions);
 
-  const [booklist, setName] = React.useState("Books:");
+  const [booklist, setBooks] = React.useState("Books:");
+
+  const [textfieldValue, setTextField] = React.useState("");
+
+  function findBook(event) {
+    let bookSearchText = event.target.value.toLowerCase();
+
+    let books_suggested = suggestions.books.filter((e) =>
+      e.title.toLowerCase().includes(bookSearchText)
+    );
+
+    let booklist = "";
+    books_suggested.forEach((element) => {
+      booklist = booklist + element.title + "\n";
+    });
+    setTextField(event.target.value);
+
+    let suggestion_array = [];
+
+    books_suggested.forEach((bookFromList) => {
+      suggestion_array.push(<Suggestion Book={bookFromList} />);
+    });
+
+    setBooks(suggestion_array);
+  }
+
+  function clear(event) {
+    setTextField("");
+    setBooks([]);
+  }
 
   return (
     <div>
       <TypeAheadDiv>
         <TypeHeadInput
           type="text"
-          onChange={(ev) => {
-            let books_suggested = suggestions.books.filter((e) =>
-              e.title.includes(ev.target.value)
-            );
-            let booklist = "";
-            books_suggested.forEach((element) => {
-              booklist = booklist + element.title + "\n";
-            });
-            setName(booklist);
-          }}
+          value={textfieldValue}
+          onChange={findBook}
         ></TypeHeadInput>
-        <Button>Clear</Button>
+        <Button onClick={clear}>Clear</Button>
       </TypeAheadDiv>
-      <p> {booklist}</p>
+      <SuggestionDiv> {booklist}</SuggestionDiv>
     </div>
   );
 }
@@ -38,6 +61,15 @@ const TypeAheadDiv = styled.div`
   justify-content: space-between;
   width: 250px;
   margin: 10px;
+`;
+
+const SuggestionDiv = styled.div`
+  margin-left: 25px;
+  margin-top: 25px;
+
+  box-shadow: 3px 3px 5px 3px #ccc;
+  border-radius: 5px;
+  width: 500px;
 `;
 
 const TypeHeadInput = styled.input`
