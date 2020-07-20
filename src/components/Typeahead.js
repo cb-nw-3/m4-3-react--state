@@ -37,7 +37,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
       <Ul>
         {matchedSuggestions.map((element, index) => (
           <Suggestion
-            key={element.index}
+            key={index}
             onClick={(e) => {
               handleSelect(matchedSuggestions[index].title);
             }}
@@ -78,6 +78,9 @@ const Ul = styled.ul`
 
 const Suggestion = styled.li`
   &:hover {
+    background-color: yellow;
+  }
+  &:first-child {
     background-color: yellow;
   }
 `;

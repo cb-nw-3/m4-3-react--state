@@ -24,9 +24,9 @@ const Bold = styled.span`
   font-style: italic;
   &::after {
     font-weight: 400;
+    content: " as ${(book) => book.category}";
   }
 `;
 export default MatchFormatter;
 
-// content: " as ${(book) => book.category}";
 // content: "${textCategory}"
