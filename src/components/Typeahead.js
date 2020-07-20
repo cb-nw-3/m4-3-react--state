@@ -21,7 +21,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              handleSelect(e.target.value);
+              handleSelect(matchedSuggestions[0].title);
             }
           }}
         ></Input>
@@ -33,11 +33,18 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           Clear
         </ClearBtn>
       </Wrapper>
-      <ul>
-        {matchedSuggestions.map((element) => (
-          <li key={element.id}>{element.title}</li>
+      <Ul>
+        {matchedSuggestions.map((element, index) => (
+          <Suggestion
+            key={element.index}
+            onClick={(e) => {
+              handleSelect(matchedSuggestions[index].title);
+            }}
+          >
+            {element.title}
+          </Suggestion>
         ))}
-      </ul>
+      </Ul>
     </>
   );
 };
@@ -61,6 +68,17 @@ const ClearBtn = styled.button`
   border: none;
   margin-left: 5px;
   padding: 0 10px;
+`;
+
+const Ul = styled.ul`
+  margin-left: 5px;
+  padding: 0 10px;
+`;
+
+const Suggestion = styled.li`
+  &:hover {
+    background-color: yellow;
+  }
 `;
 
 export default Typeahead;
