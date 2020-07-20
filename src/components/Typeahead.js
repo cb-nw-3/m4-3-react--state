@@ -3,12 +3,29 @@ import styled from 'styled-components';
 
 const Typeahead = ({ suggestions, handleSelect }) => {
 
+  //this state sets the current value of the user input
   const [value, setValue] = React.useState('');
 
+  //this is to make sure that the suggestions list only renders
+  //when the isVisible variable is set to true, triggered when there
+  //is an existing match from input and user is on the input element
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  //this will filter out the { suggestions } props to ones that match
+  //user input, to validate through case-sensitivity, we compare the user
+  //input and the suggestions by coercing them into being both lowercase.
   const matchedSuggestions = suggestions.filter(suggestion => (     
       suggestion.title.toLowerCase().includes(value.toLowerCase())
+      //only downside to this is that even a blank char matches
+      //so must add that factor into the below showSuggestions boolean
     )  
   );
+
+
+  //if there are any matching suggestions, return a true boolean
+  //the user input must be greater than 2 characters and the user must be
+  //on the input element
+  const showSuggestions = matchedSuggestions.length > 0 && isVisible && value.length > 2;
 
 
   return(
@@ -19,18 +36,25 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             value={value}
             onChange = {(event => setValue(event.target.value))}
             //onKeyDown = {(event => console.log(event.key))}
+            onFocus = {() => {setIsVisible(true);}}
           />
-          <Clear onClick = {() => setValue('')}>Clear</Clear>
+          <Clear onClick = {() => setValue('')}>
+            Clear
+          </Clear>
       </InputContainer>
-      <SearchResultList>
-          {value.length > 2 && matchedSuggestions.map(match => (
-                <SearchResultItem>
-                  {match.title}
-                </SearchResultItem>
-              ))}
-      </SearchResultList>
 
-
+      {/* conditional formatting here will only render the suggestions list
+      if the validations goes through, otherwise the padding artifact
+      will be displayed*/}
+      {showSuggestions && (
+        <SearchResultList>
+          {matchedSuggestions.map(match => (
+            <SearchResultItem>
+              {match.title}
+            </SearchResultItem>
+          ))}
+        </SearchResultList>
+      )}
     </Wrapper>
   );
 }
@@ -96,7 +120,7 @@ const SearchResultList = styled.ul`
   justify-content: flex-start;
   align-items: flex-start;
   margin: 10px 0;
-  padding: 0;
+  padding: 20px;
 
   width: 500px;
   /* border: 1px solid goldenrod; */
