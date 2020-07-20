@@ -11,6 +11,26 @@ const Typeahead = ({ suggestions, handleSelect }) => {
     );
   }
 
+  function matchFormatter(title, stringSearched = '') {
+    const index = title.toLowerCase().indexOf(stringSearched);
+    console.log(
+      `title: ${title} ${typeof title} index: ${index} string ${stringSearched}`
+    );
+    const firstHalf = title.slice(0, index - 1);
+    const secondHalf = title.slice(index - 1);
+    const Bold = styled.span`
+      font-weight: bold;
+      font-style: italic;
+    `;
+
+    return (
+      <>
+        <span>{firstHalf}</span>
+        <Bold>{secondHalf}</Bold>
+      </>
+    );
+  }
+
   return (
     <>
       <Wrapper>
@@ -41,7 +61,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
               handleSelect(matchedSuggestions[index].title);
             }}
           >
-            {element.title}
+            {matchFormatter(element.title, value)}
           </Suggestion>
         ))}
       </Ul>
