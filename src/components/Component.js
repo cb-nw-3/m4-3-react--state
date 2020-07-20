@@ -8,22 +8,14 @@ function Suggestion(props) {
   return <ul>
     {props.data.map(book => {
       if (book.title.toLowerCase().includes(props.value) && props.value.length > 1) {
-        return <StyledLink href="www.google.com">
+        return <StyledLink href="">
           <StyledListItem>{book.title}</StyledListItem>
-          </StyledLink>
+        </StyledLink>
       }
     })}
   </ul>
 }
 
-const StyledLink = styled.a`
-  text-decoration: none;
-  color: black;
-
-  &:hover {
-    background-color: blue;
-  }
-`
 const StyledListItem = styled.li`
   width: 300px;
   text-align: left;
@@ -31,7 +23,14 @@ const StyledListItem = styled.li`
   padding: 5px;
 
   &:hover {
-    background-color: lightgray;
+    background-color: #fef6e4;
+  }
+`
+const StyledLink = styled.a`
+  text-decoration: none;
+  color: black;
+  &:focus ${StyledListItem} {
+    background-color: #fef6e4;
   }
 `
 
