@@ -3,10 +3,14 @@ import styled from 'styled-components';
 
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [value, setValue] = useState('');
-  const matchedSuggestions = suggestions.filter((book) =>
-    book.title.toLowerCase().includes(value.toLowerCase())
-  );
-  console.log(matchedSuggestions);
+  let matchedSuggestions = [{ title: '' }];
+  if (value === '' || value.length < 2) {
+  } else {
+    matchedSuggestions = suggestions.filter((book) =>
+      book.title.toLowerCase().includes(value.toLowerCase())
+    );
+  }
+
   return (
     <>
       <Wrapper>
@@ -31,7 +35,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
       </Wrapper>
       <ul>
         {matchedSuggestions.map((element) => (
-          <li>{element.title}</li>
+          <li key={element.id}>{element.title}</li>
         ))}
       </ul>
     </>
