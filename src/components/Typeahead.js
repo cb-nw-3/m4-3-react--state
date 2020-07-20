@@ -3,21 +3,38 @@ import styled from 'styled-components';
 
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [value, setValue] = useState('');
+  const matchedSuggestions = suggestions.filter((book) =>
+    book.title.toLowerCase().includes(value.toLowerCase())
+  );
+  console.log(matchedSuggestions);
   return (
-    <Wrapper>
-      <Input
-        name='search'
-        type='text'
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleSelect(e.target.value);
-          }
-        }}
-      ></Input>
-      <ClearBtn>Clear</ClearBtn>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Input
+          name='search'
+          type='text'
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSelect(e.target.value);
+            }
+          }}
+        ></Input>
+        <ClearBtn
+          onClick={() => {
+            setValue('');
+          }}
+        >
+          Clear
+        </ClearBtn>
+      </Wrapper>
+      <ul>
+        {matchedSuggestions.map((element) => (
+          <li>{element.title}</li>
+        ))}
+      </ul>
+    </>
   );
 };
 

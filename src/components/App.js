@@ -1,11 +1,12 @@
 import React from 'react';
-import books from '../data';
-
+import data from '../data';
 import GlobalStyles from './GlobalStyles';
 import Typeahead from './Typeahead';
 
+const { books } = data;
+
 const App = (props) => {
-  console.log(books);
+  // console.log(books);
   return (
     <>
       <GlobalStyles />
