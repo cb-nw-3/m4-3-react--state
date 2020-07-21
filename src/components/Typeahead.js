@@ -67,9 +67,13 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                   <Prediction>
                     {/* this secondary span is just bolded, but is indexed from
                     where the first char matches, to the end of the suggestion match */}
-                    {match.title.slice(matchIndex + value.length)}
+                    {`${match.title.slice(matchIndex + value.length)}`}
                   </Prediction>
                 </span>
+                <span>{` in `}</span>
+                <PredictionGenre>
+                  {`${match.categoryId.toUpperCase()}`}
+                </PredictionGenre>
 
                 {/* {console.log(
                   `Index of Results: ${index}, Index of Word ${match.title
@@ -170,6 +174,11 @@ const SearchResultItem = styled.li``;
 
 const Prediction = styled.span`
   font-weight: bolder;
+`;
+
+const PredictionGenre = styled.span`
+  font-style: italic;
+  color: purple;
 `;
 
 export default Typeahead;
