@@ -22,7 +22,7 @@ function TypeAhead(props) {
           }
         }}
       ></StyledInput>
-      <Component data={data.books} value={value}></Component>
+      <Component data={data.books} value={value} categories={data.categories}></Component>
     </ComponentContainer>
     <ClearButton onClick={() => setValue('')}>Clear</ClearButton>
   </InputContainer>
@@ -40,6 +40,7 @@ const StyledInput = styled.input`
   height: 30px;
   width: 300px;
   border-radius: 5px;
+  margin-right: 20px;
 `
 const ClearButton = styled.button`
   height: 30px;
@@ -48,7 +49,6 @@ const ClearButton = styled.button`
   background-color: blue;
   border-radius: 5px;
   color: white;
-  margin-left: 20px;
 `
 const ComponentContainer = styled.div`
   display: flex;
