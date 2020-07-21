@@ -22,15 +22,18 @@ const StyledButton = styled.button`
 const StyledUl = styled.ul`
   width: 410px;
   box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 `;
 
-const StyledLi = styled.li`
-  padding: 10px;
+const Suggestion = styled.li`
+  padding: 20px;
 `;
 
 const Typeahead = ({ suggestions, handleSelect, categories }) => {
   const [value, setValue] = React.useState("");
-
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
   const renderedSuggestions = suggestions.filter(
     (suggestion) =>
       suggestion.title.toLowerCase().includes(value.toLowerCase()) &&
@@ -46,41 +49,49 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
           setValue(ev.target.value);
         }}
         onKeyDown={(ev) => {
-          console.log(ev.key);
-          switch (ev.key === "Enter") {
+          switch (ev.key) {
             case "Enter":
               handleSelect(ev.target.value);
-              break;
+              return;
+
+            case "ArrowUp":
+              setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+              console.log(selectedSuggestionIndex);
+              return;
+
             case "ArrowDown":
-              //do something
-              break;
+              setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+              return;
           }
         }}
         placeholder="Enter a book title"
       />
       <StyledButton onClick={() => setValue("")}>Clear</StyledButton>
-      <StyledUl>
-        {renderedSuggestions.map((suggestion) => {
-          const index = suggestion.title
-            .toLowerCase()
-            .indexOf(value.toLowerCase());
-
-          const end = index + value.length;
-
-          const firstHalf = suggestion.title.slice(0, index);
-          const secondHalf = suggestion.title.slice(end);
-
+      <StyledUl
+        style={{
+          visibility: renderedSuggestions.length > 1 ? "visible" : "hidden",
+        }}
+      >
+        {renderedSuggestions.map((suggestion, index) => {
           const category = categories[suggestion.categoryId].name;
+
+          const prediction = suggestion.title.slice(value.length);
 
           if (value.length > 1) {
             return (
-              <StyledLi
+              <Suggestion
                 key={suggestion.id}
                 onClick={handleSelect(suggestion.title)}
+                style={{
+                  background:
+                    index + 1 === selectedSuggestionIndex
+                      ? "hsla(50deg, 100%, 80%, 0.25)"
+                      : "transparent",
+                }}
+                onMouseEnter={() => setSelectedSuggestionIndex(index + 1)}
               >
-                <span style={{ fontWeight: "bold" }}>{firstHalf}</span>
                 <span>{value}</span>
-                <span style={{ fontWeight: "bold" }}>{secondHalf}</span>
+                <span style={{ fontWeight: "bold" }}>{prediction}</span>
                 <span
                   style={{
                     fontStyle: "italic",
@@ -90,7 +101,7 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
                   <span style={{ color: "#000" }}>{` in `}</span>
                   {category}
                 </span>
-              </StyledLi>
+              </Suggestion>
             );
           }
         })}

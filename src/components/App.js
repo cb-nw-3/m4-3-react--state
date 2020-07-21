@@ -20,9 +20,7 @@ const App = (props) => {
       <GlobalStyles />
       <Typeahead
         suggestions={books}
-        handleSelect={(suggestion) => {
-          console.log("xxxx");
-        }}
+        handleSelect={(suggestion) => {}}
         categories={categories}
       />
     </Wrapper>
