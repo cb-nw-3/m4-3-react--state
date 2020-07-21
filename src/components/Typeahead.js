@@ -78,14 +78,24 @@ const ClearBtn = styled.button`
 `;
 
 const Ul = styled.ul`
+  position: relative;
+  top: -7px;
+  left: 20px;
   margin-left: 5px;
   padding: 0 10px;
+  width: 500px;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow: 3px 3px 5px 6px #ccc; /* Firefox 3.5 - 3.6 */
+  box-shadow: 3px 3px 5px 6px #ccc;
   &:hover li:first-child {
     background-color: white;
   }
 `;
 
 const Suggestion = styled.li`
+  border-radius: 6px;
+  padding-left: 15px;
+  margin-bottom: 5px;
   &:hover {
     background-color: yellow !important;
   }

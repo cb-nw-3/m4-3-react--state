@@ -23,7 +23,8 @@ const Bold = styled.span`
   font-style: italic;
   &::after {
     font-weight: 400;
-    content: " as ${(props) => props.category}";
+    content: "${(props) => props.category}";
+    font-size: 0.7rem;
   }
 `;
 export default MatchFormatter;
