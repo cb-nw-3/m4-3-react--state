@@ -74,8 +74,8 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
       >
         {renderedSuggestions.map((suggestion, index) => {
           const category = categories[suggestion.categoryId].name;
-
           const prediction = suggestion.title.slice(value.length);
+          const userInput = suggestion.title.slice(0, value.length);
 
           if (value.length > 1) {
             return (
@@ -87,11 +87,17 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
                     index + 1 === selectedSuggestionIndex
                       ? "hsla(50deg, 100%, 80%, 0.25)"
                       : "transparent",
+
+                  cursor:
+                    index + 1 === selectedSuggestionIndex
+                      ? "pointer"
+                      : "default",
                 }}
                 onMouseEnter={() => setSelectedSuggestionIndex(index + 1)}
               >
-                <span>{value}</span>
+                <span>{userInput}</span>
                 <span style={{ fontWeight: "bold" }}>{prediction}</span>
+
                 <span
                   style={{
                     fontStyle: "italic",
