@@ -7,16 +7,22 @@ function Suggestion(props) {
   let firstPart;
   let secondPart;
   let inputIndex;
+  let inputPart;
+  let maxValue = 0;
   return <ul>
     {props.data.map(book => {
-      if (book.title.toLowerCase().includes(props.value) && props.value.length > 1) {
-        inputIndex = book.title.toLowerCase().indexOf(props.value);
+      if (book.title.toLowerCase().includes(props.value.toLowerCase()) && props.value.length > 1 && maxValue < 5) {
+        maxValue++;
+
+        inputIndex = book.title.toLowerCase().indexOf(props.value.toLowerCase());
+        inputPart = book.title.slice(inputIndex, inputIndex + props.value.length);
         firstPart = book.title.slice(0, inputIndex);
         secondPart = book.title.slice(inputIndex + props.value.length);
-        return <StyledLink href="">
+
+        return <StyledLink href="" key={book.id}>
           <StyledListItem>
             <FirstPart>{firstPart}</FirstPart>
-            <InputPart>{props.value}</InputPart>
+            <InputPart>{inputPart}</InputPart>
             <SecondPart>{secondPart}</SecondPart> 
             <StyledCategory>in {props.categories[book.categoryId].name}</StyledCategory>
           </StyledListItem>

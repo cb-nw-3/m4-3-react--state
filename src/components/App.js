@@ -6,7 +6,6 @@ import TypeAhead from './TypeAhead';
 import data from '../data';
 const { categories, books } = data; 
 
-
 const App = (props) => {
   console.log('categories', categories)
   console.log('books', books)

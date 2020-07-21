@@ -5,7 +5,10 @@ import Component from './Component';
 import data from '../data';
 
 function TypeAhead(props) {
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState('');
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
+
+  let maxValue = 5;
 
   return <InputContainer>
     <ComponentContainer>
@@ -16,9 +19,19 @@ function TypeAhead(props) {
           setValue(ev.target.value);
         }}
         onKeyDown={(ev) => {
+          
+          let suggestions = props.data.filter(book => book.title.toLowerCase().includes(value.toLowerCase())).splice(0, maxValue)
+          
+          console.log('suggestions', suggestions)
           if (ev.key === 'Enter') {
             alert(ev.target.value)
             // handleSelect(ev.target.value);
+          } else if (ev.key === 'Arrowup') {
+            setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+            return;
+          } else if (ev.key === 'ArrowDown') {
+            setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+            return;
           }
         }}
       ></StyledInput>
