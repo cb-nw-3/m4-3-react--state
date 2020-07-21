@@ -1,10 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Typeahead = ({ suggestions, handleSelect }) => {
-
   //this state sets the current value of the user input
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState("");
 
   //this is to make sure that the suggestions list only renders
   //when the isVisible variable is set to true, triggered when there
@@ -14,33 +13,31 @@ const Typeahead = ({ suggestions, handleSelect }) => {
   //this will filter out the { suggestions } props to ones that match
   //user input, to validate through case-sensitivity, we compare the user
   //input and the suggestions by coercing them into being both lowercase.
-  const matchedSuggestions = suggestions.filter(suggestion => (     
-      suggestion.title.toLowerCase().includes(value.toLowerCase())
-      //only downside to this is that even a blank char matches
-      //so must add that factor into the below showSuggestions boolean
-    )  
+  const matchedSuggestions = suggestions.filter(
+    (suggestion) => suggestion.title.toLowerCase().includes(value.toLowerCase())
+    //only downside to this is that even a blank char matches
+    //so must add that factor into the below showSuggestions boolean
   );
-
 
   //if there are any matching suggestions, return a true boolean
   //the user input must be greater than 2 characters and the user must be
   //on the input element
-  const showSuggestions = matchedSuggestions.length > 0 && isVisible && value.length > 2;
+  const showSuggestions =
+    matchedSuggestions.length > 0 && isVisible && value.length > 2;
 
-
-  return(
+  return (
     <Wrapper>
       <InputContainer>
-        <Input 
-            type="text" 
-            value={value}
-            onChange = {(event => setValue(event.target.value))}
-            //onKeyDown = {(event => console.log(event.key))}
-            onFocus = {() => {setIsVisible(true);}}
-          />
-          <Clear onClick = {() => setValue('')}>
-            Clear
-          </Clear>
+        <Input
+          type="text"
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          //onKeyDown = {(event => console.log(event.key))}
+          onFocus={() => {
+            setIsVisible(true);
+          }}
+        />
+        <Clear onClick={() => setValue("")}>Clear</Clear>
       </InputContainer>
 
       {/* conditional formatting here will only render the suggestions list
@@ -48,17 +45,45 @@ const Typeahead = ({ suggestions, handleSelect }) => {
       will be displayed*/}
       {showSuggestions && (
         <SearchResultList>
-          {matchedSuggestions.map(match => (
-            <SearchResultItem>
-              {match.title}
-            </SearchResultItem>
-          ))}
+          {matchedSuggestions.map((match, index) => {
+            //this will index the first occurence of the user input value
+            //needs to be compared while lower case to account for all possible
+            //matches
+            const matchIndex = match.title
+              .toLowerCase()
+              .indexOf(value.toLowerCase());
+
+            //use a return statement in order to include the above code
+            return (
+              <SearchResultItem>
+                <span>
+                  {/* First Half */}
+                  {/* the resulting match is a slice, from the beginning, to
+                  where the value input matches the suggestion, also need to add 
+                  the user input length because it will index the first char, but 
+                  we want the whole word */}
+                  {match.title.slice(0, matchIndex + value.length)}
+                  {/* Second Half */}
+                  <Prediction>
+                    {/* this secondary span is just bolded, but is indexed from
+                    where the first char matches, to the end of the suggestion match */}
+                    {match.title.slice(matchIndex + value.length)}
+                  </Prediction>
+                </span>
+
+                {/* {console.log(
+                  `Index of Results: ${index}, Index of Word ${match.title
+                    .toLowerCase()
+                    .indexOf(value.toLowerCase())}`
+                )} */}
+              </SearchResultItem>
+            );
+          })}
         </SearchResultList>
       )}
     </Wrapper>
   );
-}
-
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -75,7 +100,6 @@ const InputContainer = styled.div`
   /* padding: 50px; */
   border-radius: 12px;
   /* box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.1); */
-  
 `;
 
 const Input = styled.input`
@@ -99,12 +123,12 @@ const Clear = styled.button`
   border-radius: 10px;
   color: white;
   font-size: 22px;
-  background-color: #4C0CD4;
+  background-color: #4c0cd4;
   border: none;
   outline: none;
 
   &:hover {
-    background: #FF0073;
+    background: #ff0073;
     outline: none;
     cursor: pointer;
   }
@@ -125,7 +149,7 @@ const SearchResultList = styled.ul`
   width: 500px;
   /* border: 1px solid goldenrod; */
   box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.1);
-  
+
   &:after {
     /* padding: 15px; */
   }
@@ -134,7 +158,7 @@ const SearchResultList = styled.ul`
     width: 100%;
     line-height: 1.6;
     padding: 15px;
-    font-weight: 600;
+    /* font-weight: 600; */
   }
 
   & li:first-child {
@@ -142,8 +166,10 @@ const SearchResultList = styled.ul`
   }
 `;
 
-const SearchResultItem = styled.li`
-  
+const SearchResultItem = styled.li``;
+
+const Prediction = styled.span`
+  font-weight: bolder;
 `;
 
 export default Typeahead;
