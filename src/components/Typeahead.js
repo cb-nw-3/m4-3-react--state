@@ -80,11 +80,14 @@ const ClearBtn = styled.button`
 const Ul = styled.ul`
   margin-left: 5px;
   padding: 0 10px;
+  &:hover li:first-child {
+    background-color: white;
+  }
 `;
 
 const Suggestion = styled.li`
   &:hover {
-    background-color: yellow;
+    background-color: yellow !important;
   }
   &:first-child {
     background-color: yellow;
