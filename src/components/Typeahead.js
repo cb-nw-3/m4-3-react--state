@@ -3,7 +3,8 @@ import data from "../data";
 import styled from "styled-components";
 
 
-const Typeahead = ({ data, handleSelect }) => {
+const Typeahead = ({ suggestions, handleSelect }) => {
+  // console.log(data)
   const [value, setValue] = React.useState("");
 
   return (
@@ -19,6 +20,16 @@ const Typeahead = ({ data, handleSelect }) => {
           }
         }}
       />
+      <ul>
+        {suggestions.map((suggestion) => {
+          return (
+            <Suggestion key={suggestion.id} onClick={() => handleSelect(suggestion.title)}>
+  {suggestion.title}
+</Suggestion>
+
+          )
+        })}
+      </ul>
       <Button onClick={() => setValue("")}>Clear</Button>
     </>
   );
@@ -42,4 +53,8 @@ const Input = styled.input`
     width: 250px;
     border-radius: 5px;
     border-color: silver;
+`;
+
+const Suggestion = styled.li`
+  list-style-type: circle,
 `;
