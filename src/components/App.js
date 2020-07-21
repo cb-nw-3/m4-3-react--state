@@ -1,14 +1,34 @@
-import React from 'react';
+import React from "react";
 
-import GlobalStyles from './GlobalStyles';
+import styled from "styled-components";
+
+import data from "../data";
+
+import GlobalStyles from "./GlobalStyles";
+
+import Typeahead from "./Typeahead";
 
 const App = (props) => {
   return (
     <>
       <GlobalStyles />
-      {/* TODO */}
+      <Wrapper>
+        <Typeahead
+          suggestions={data.books}
+          handleSelect={(suggestion) => {
+            window.alert(suggestion);
+          }}
+        />
+      </Wrapper>
     </>
   );
 };
 
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 200px;
+  flex-direction: column;
+`;
 export default App;
