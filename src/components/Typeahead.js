@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import MatchFormatter from './MatchFormatter';
 
+let showUl = false;
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [value, setValue] = useState('');
   let matchedSuggestions = [{ title: '' }];
   if (value === '' || value.length < 2) {
+    showUl = false;
   } else {
     matchedSuggestions = suggestions.filter((book) =>
       book.title.toLowerCase().includes(value.toLowerCase())
     );
+    showUl = true;
   }
+  console.log(showUl);
 
   return (
     <>
@@ -34,18 +38,20 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           Clear
         </ClearBtn>
       </Wrapper>
-      <Ul>
-        {matchedSuggestions.map((element, index) => (
-          <Suggestion
-            key={index}
-            onClick={(e) => {
-              handleSelect(matchedSuggestions[index].title);
-            }}
-          >
-            <MatchFormatter book={element} string={value} />
-          </Suggestion>
-        ))}
-      </Ul>
+      {showUl && (
+        <Ul>
+          {matchedSuggestions.map((element, index) => (
+            <Suggestion
+              key={index}
+              onClick={(e) => {
+                handleSelect(matchedSuggestions[index].title);
+              }}
+            >
+              <MatchFormatter book={element} string={value} />
+            </Suggestion>
+          ))}
+        </Ul>
+      )}
     </>
   );
 };

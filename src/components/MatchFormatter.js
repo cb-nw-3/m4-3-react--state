@@ -8,13 +8,12 @@ const MatchFormatter = ({ book, string = '' }) => {
   const secondHalf = book.title.slice(index - 1);
   let textCategory = '';
   if (book.categoryId !== undefined) {
-    // textCategory = ' as ' + categories[book.categoryId].name;
-    console.log(categories[book.categoryId].name);
+    textCategory = ' as ' + categories[book.categoryId].name;
   }
   return (
     <>
       <span>{firstHalf}</span>
-      <Bold category={book.categoryId}>{secondHalf}</Bold>
+      <Bold category={textCategory}>{secondHalf}</Bold>
     </>
   );
 };
@@ -24,7 +23,7 @@ const Bold = styled.span`
   font-style: italic;
   &::after {
     font-weight: 400;
-    content: " as ${(book) => book.category}";
+    content: " as ${(props) => props.category}";
   }
 `;
 export default MatchFormatter;
