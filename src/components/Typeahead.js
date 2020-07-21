@@ -6,7 +6,7 @@ const Typeahead= ({suggestions, handleSelect}) => {
   const matchedSuggestions = suggestions.filter(suggestion =>suggestion.title.toLowerCase().includes(value.toLowerCase())
   );
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
-  const [isSelected, setIsSelected] = React.useState(false);
+  
   return (
       <Container>
       <Wrapper>
@@ -33,25 +33,16 @@ const Typeahead= ({suggestions, handleSelect}) => {
       />
       <ClearButton onClick={() => setValue('')}>Clear</ClearButton>
       <SuggestionList>
-          {value.length >= 2 && matchedSuggestions.map((suggestion) => {
+          {value.length >= 2 && matchedSuggestions.map((suggestion, index) => {
+              const isSelected = selectedSuggestionIndex === index;
               return (
                 <Suggestion 
                   key={suggestion.id}
                   style={{
-                      background: isSelected ? 'hsla(50deg, 100%, 80%, 0.25)' : 'transparent',
+                      background: isSelected ? 'blue' : 'transparent',
                   }}
                   onClick={() => handleSelect(suggestion.title)}
-                  onMouseEnter={(ev) => {
-                      switch(ev) {
-                        case 'selected': {
-                          setIsSelected(isSelected);
-                          return;
-                        }
-                        case 'not selected': {
-                            setIsSelected(!isSelected);
-                            return;
-                        }
-                      }
+                  onMouseEnter={() => {setSelectedSuggestionIndex(index);
                   }}
                 >
                   <span>
