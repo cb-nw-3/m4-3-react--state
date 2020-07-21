@@ -6,6 +6,9 @@ import { categories } from "./../data";
 
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [bookName, setBookName] = React.useState("");
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
 
   let matchedBookArray = suggestions.filter((book) => {
     let LowerCaseSearch = bookName.toLowerCase();
@@ -32,8 +35,23 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             setBookName(ev.target.value);
           }}
           onKeyDown={(ev) => {
-            if (ev.key === "Enter") {
-              handleSelect(ev.target.value);
+            switch (ev.key) {
+              case "Enter": {
+                if (isMatchedBookArrayFull) {
+                  handleSelect(matchedBookArray[selectedSuggestionIndex].title);
+                  return;
+                } else {
+                  return;
+                }
+              }
+              case "ArrowUp": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                return;
+              }
+              case "ArrowDown": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                return;
+              }
             }
           }}
         />
@@ -55,10 +73,18 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             let firstSlice = book.title.slice(0, indexToSlice);
             let secondSlice = book.title.slice(indexToSlice);
             let CategoryName = categories[book.categoryId].name;
+            const isSelected = selectedSuggestionIndex === index;
+
             return (
               <Suggestion
                 key={book + index}
+                style={{
+                  background: isSelected
+                    ? "hsla(50deg, 100%, 80%, 0.25)"
+                    : "transparent",
+                }}
                 onClick={() => handleSelect(book.title)}
+                onMouseEnter={() => setSelectedSuggestionIndex(index)}
               >
                 <span>
                   {`${firstSlice}`}
@@ -108,9 +134,6 @@ const DropDown = styled.ul`
 
 const Suggestion = styled.li`
   padding: 10px 5px;
-  &:hover {
-    background-color: beige;
-  }
 `;
 
 const Prediction = styled.span`
