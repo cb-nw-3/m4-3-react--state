@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 function Suggestion({ Book }) {
-  console.log(Book);
+  // console.log(Book);
   return <BookDiv>{Book.title}</BookDiv>;
 }
 
