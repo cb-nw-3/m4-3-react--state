@@ -60,3 +60,51 @@ render(<Temperature initialT={0} />)
 
 ```
 ````
+
+//fix this
+
+```jsx
+const Button = ({ type, children }) => {
+  if (type === "primary") {
+    const [color, setColor] = React.useState("red");
+    return (
+      <button
+        style={{ color }}
+        onMouseEnter={() => {
+          setColor("purple");
+        }}
+        onMouseLeave={() => {
+          setColor("red");
+        }}
+      >
+        {children}
+      </button>
+    );
+  } else {
+    return <button style={{ backgroundColor: "purple" }}>{children}</button>;
+  }
+};
+
+//here is the fix
+
+const Button = ({ type, children }) => {
+  const [color, setColor] = React.useState("red");
+  if (type === "primary") {
+    return (
+      <button
+        style={{ color }}
+        onMouseEnter={() => {
+          setColor("purple");
+        }}
+        onMouseLeave={() => {
+          setColor("red");
+        }}
+      >
+        {children}
+      </button>
+    );
+  } else {
+    return <button style={{ backgroundColor: "purple" }}>{children}</button>;
+  }
+};
+```

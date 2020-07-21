@@ -2,18 +2,22 @@ import React from "react";
 
 import styled from "styled-components";
 
+import { categories } from "./../data";
+
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [bookName, setBookName] = React.useState("");
 
   let matchedBookArray = suggestions.filter((book) => {
     let LowerCaseSearch = bookName.toLowerCase();
     let bookLowerCaseTitle = book.title.toLowerCase();
-    if (bookName === "") {
-      return;
-    } else if (bookName.length < 2) {
-      return;
-    } else if (bookLowerCaseTitle.includes(LowerCaseSearch)) {
-      return book;
+    if (
+      bookName !== "" &&
+      bookName.length >= 2 &&
+      bookLowerCaseTitle.includes(LowerCaseSearch)
+    ) {
+      return true;
+    } else {
+      return false;
     }
   });
 
@@ -44,12 +48,26 @@ const Typeahead = ({ suggestions, handleSelect }) => {
       {isMatchedBookArrayFull && (
         <DropDown>
           {matchedBookArray.map((book, index) => {
+            let lowerCaseTitle = book.title.toLowerCase();
+            let lowerCaseBookName = bookName.toLowerCase();
+            let indexOfSearch = lowerCaseTitle.indexOf(lowerCaseBookName);
+            let indexToSlice = indexOfSearch + bookName.length;
+            let firstSlice = book.title.slice(0, indexToSlice);
+            let secondSlice = book.title.slice(indexToSlice);
+            let CategoryName = categories[book.categoryId].name;
             return (
               <Suggestion
                 key={book + index}
                 onClick={() => handleSelect(book.title)}
               >
-                {book.title}
+                <span>
+                  {`${firstSlice}`}
+                  <Prediction>{`${secondSlice}`} </Prediction>
+                </span>
+                <CategoryListing>
+                  in
+                  <Category> {CategoryName}</Category>
+                </CategoryListing>
               </Suggestion>
             );
           })}
@@ -93,4 +111,17 @@ const Suggestion = styled.li`
   &:hover {
     background-color: beige;
   }
+`;
+
+const Prediction = styled.span`
+  font-weight: 700;
+`;
+
+const CategoryListing = styled.span`
+  font-size: 0.8em;
+  font-style: italic;
+`;
+
+const Category = styled.span`
+  color: violet;
 `;

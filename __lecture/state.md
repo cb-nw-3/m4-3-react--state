@@ -261,6 +261,27 @@ const App = () => {
 render(<App />);
 ```
 
+```jsx
+//SOLUTION
+const Counter = ({ handleClick }) => {
+  return (
+    <>
+      <button onClick={() => handleClick()}>Increment</button>
+    </>
+  );
+};
+
+const App = () => {
+  const [count, setCount] = React.useState(0);
+  return (
+    <>
+      The current count is: {count}
+      <Counter handleClick={() => setCount(count + 1)} />
+    </>
+  );
+};
+```
+
 ---
 
 ```jsx live=true
@@ -298,6 +319,49 @@ const App = () => {
     <>
       <p>My favourite food is: ???</p>
       <FavouriteFood />
+    </>
+  );
+};
+
+render(<App />);
+```
+
+```jsx
+//solution
+
+const FavouriteFood = ({ food, setFood }) => {
+  return (
+    <>
+      <label>
+        <input
+          type="radio"
+          name="food"
+          value="pizza"
+          checked={food === "pizza"}
+          onChange={() => setFood("pizza")}
+        />
+        Pizza
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="food"
+          value="broccoli"
+          checked={food === "broccoli"}
+          onChange={() => setFood("broccoli")}
+        />
+        Broccoli
+      </label>
+    </>
+  );
+};
+
+const App = () => {
+  const [food, setFood] = React.useState("");
+  return (
+    <>
+      <p>My favourite food is: {food}</p>
+      <FavouriteFood food={food} setFood={setFood} />
     </>
   );
 };
