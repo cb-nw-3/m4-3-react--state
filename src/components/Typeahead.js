@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import Button from './Button';
 
 
-const Typeahead = ({ suggestions, handleSelect }) => {
+const Typeahead = ({ suggestions, handleSelect, categories }) => {
     const [value, setValue] = React.useState('');
 
     let matchedSuggestions = suggestions
@@ -31,15 +32,19 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                 <Button onClick={() => setValue('')}>Clear</Button>
             </Search>
             {matchedSuggestions.length > 0 && (<SuggestionList>
-                {console.log("getting here")}
                 {matchedSuggestions.map((suggestion) => {
                     return (
-                        <Suggestion
+                        <Suggestions
                             key={suggestion.id}
                             onClick={() => handleSelect(suggestion.title)}
                         >
-                            {suggestion.title}
-                        </Suggestion>
+                            <span>
+                                {suggestion.title.slice(0, suggestion.title.toLowerCase().indexOf(value) + value.length)}
+                                <Prediction>{suggestion.title.slice(suggestion.title.toLowerCase().indexOf(value) + value.length)} </Prediction>
+                                in <Category> {suggestion.categoryId}</Category>
+                            </span>
+
+                        </Suggestions>
                     );
                 })}
             </SuggestionList>)}
@@ -58,33 +63,15 @@ const Input = styled.input`
     padding: 0 5px;
 `
 
-const Button = styled.button`
-    background: red;
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    outline: none;
-    text-align: center;
-    margin-left: 10px;
-    transition: 0.5s;
-
-    &:hover{
-        background: #DC143C;
-    }
-`
 const SuggestionList = styled.ul`
     list-style-type: none;
     margin-top: 5px;
     border-bottom-right-radius: 30px;
     border: 2px solid black;
+    box-shadow: 1px 1px 3px 3px grey;
 `
 
-const Suggestion = styled.li`
+const Suggestions = styled.li`
     padding: 10px;
     border-bottom: 1px solid black;
 
@@ -97,6 +84,15 @@ const Suggestion = styled.li`
         background: beige;
         cursor: pointer;
     }
+`
+
+const Prediction = styled.span`
+  font-weight: bold;
+`
+
+const Category = styled.span`
+    font-style: italic;
+    color: purple;
 `
 
 export default Typeahead;
