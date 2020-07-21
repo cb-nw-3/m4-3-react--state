@@ -4,9 +4,13 @@ import styled from 'styled-components';
 
 
 
+
 const Typeahead = ({suggestions, categories, handleSelect}) => {
     const [value, setValue] = React.useState('');
+    let matchedSuggestions = suggestions;
+
     return (
+    <>
     <Wrapper>
       <Input
         type='text'
@@ -17,9 +21,24 @@ const Typeahead = ({suggestions, categories, handleSelect}) => {
             handleSelect(ev.target.value);
           }
         }}></Input>
+      
       <ClearButton onClick={() => setValue('')}>Clear
       </ClearButton>
+      
     </Wrapper>
+    <Unlisted>
+        {matchedSuggestions.map((suggestion) => {
+          return (
+            <li
+              key={suggestion.id}
+              onClick={() => handleSelect(suggestion, suggestion.title)}
+              >
+                {suggestion.title}
+            </li>
+          );
+        })}
+    </Unlisted>
+    </>
     );
 };
 
@@ -29,6 +48,7 @@ const Wrapper = styled.div`
 
 const Input = styled.input`
     width: 350px;
+    padding: 5px;
 `;
 
 const ClearButton = styled.button`
@@ -44,4 +64,7 @@ const ClearButton = styled.button`
 
 `;
 
+const Unlisted = styled.ul`
+  display: inline;
+`
 export default Typeahead;
