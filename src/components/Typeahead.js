@@ -2,19 +2,16 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import MatchFormatter from './MatchFormatter';
 
-let showUl = false;
 const Typeahead = ({ suggestions, handleSelect }) => {
+  let showUl = false;
   const [value, setValue] = useState('');
+  const [index, setIndex] = useState(0);
   let matchedSuggestions = [{ title: '' }];
-  if (value === '' || value.length < 2) {
-    showUl = false;
-  } else {
-    matchedSuggestions = suggestions.filter((book) =>
+  matchedSuggestions =
+    value.length > 1 &&
+    suggestions.filter((book) =>
       book.title.toLowerCase().includes(value.toLowerCase())
     );
-    showUl = true;
-  }
-  console.log(showUl);
 
   return (
     <>
@@ -23,10 +20,21 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           name='search'
           type='text'
           value={value}
+          placeholder='Enter a book title'
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSelect(matchedSuggestions[0].title);
+            switch (e.key) {
+              case 'Enter':
+                handleSelect(e.target.value);
+                break;
+
+              case 'ArrowUp':
+                setIndex(index - 1);
+                break;
+
+              case 'ArrowDown':
+                setIndex(index + 1);
+                break;
             }
           }}
         ></Input>
@@ -38,7 +46,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           Clear
         </ClearBtn>
       </Wrapper>
-      {showUl && (
+      {!!matchedSuggestions.length && (
         <Ul>
           {matchedSuggestions.map((element, index) => (
             <Suggestion
