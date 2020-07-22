@@ -6,6 +6,8 @@ import Button from './Button';
 const Typeahead = ({ suggestions, handleSelect, categories }) => {
     const [value, setValue] = React.useState('');
 
+    const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
+
     let matchedSuggestions = suggestions
         .filter((suggestion) => {
             const minimumCharacters = value.length > 1;
@@ -24,19 +26,39 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
                     value={value}
                     onChange={(ev) => setValue(ev.target.value)}
                     onKeyDown={(ev) => {
-                        if (ev.key === 'Enter') {
-                            handleSelect(ev.target.value);
+                        switch (ev.key) {
+                            case "Enter": {
+                                handleSelect(ev.target.value);
+                                return;
+                            }
+                            case ("ArrowUp" && selectedSuggestionIndex > 0): {
+                                ev.preventDefault();
+                                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                                return;
+                            }
+                            case ("ArrowDown"): {
+                                ev.preventDefault();
+                                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                                return;
+                            }
                         }
                     }}
                 />
                 <Button onClick={() => setValue('')}>Clear</Button>
             </Search>
             {matchedSuggestions.length > 0 && (<SuggestionList>
-                {matchedSuggestions.map((suggestion) => {
+                {matchedSuggestions.map((suggestion, index) => {
+
+                    const isSelected = selectedSuggestionIndex === index;
+
                     return (
                         <Suggestions
                             key={suggestion.id}
+                            style={{
+                                background: isSelected ? 'beige' : 'transparent',
+                            }}
                             onClick={() => handleSelect(suggestion.title)}
+                            onMouseEnter={() => { setSelectedSuggestionIndex(index); }}
                         >
                             <span>
                                 {suggestion.title.slice(0, suggestion.title.toLowerCase().indexOf(value) + value.length)}
@@ -78,11 +100,6 @@ const Suggestions = styled.li`
     &:last-of-type{
         border-bottom-right-radius: 30px;
         border-bottom: none
-    }
-
-    &:hover{
-        background: beige;
-        cursor: pointer;
     }
 `
 
