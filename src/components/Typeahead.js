@@ -25,6 +25,12 @@ const Typeahead = ({ suggestions, handleSelect }) => {
   const showSuggestions =
     matchedSuggestions.length > 0 && isVisible && value.length > 2;
 
+  //this state manages the indices of the search results, index of course starts at 0
+  //the first search return if there is one.
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
+
   return (
     <Wrapper>
       <InputContainer>
@@ -35,6 +41,39 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           //onKeyDown = {(event => console.log(event.key))}
           onFocus={() => {
             setIsVisible(true);
+          }}
+          onKeyDown={(event) => {
+            // Switching from if/else to a "switch" statement,
+            // since now we're handling multiple different values for
+            // ev.key. This is an optional change, though; we could
+            // still do it with if/else-if.
+            switch (event.key) {
+              case "Enter": {
+                handleSelect(event.target.value);
+                return;
+              }
+              case "ArrowUp": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+
+                //This console.log allows me to see what index im at for every
+                //key press, and what suggestion is being selected
+                // console.log(
+                //   event.key,
+                //   selectedSuggestionIndex,
+                //   matchedSuggestions[selectedSuggestionIndex]
+                // );
+                return;
+              }
+              case "ArrowDown": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                // console.log(
+                //   event.key,
+                //   selectedSuggestionIndex,
+                //   matchedSuggestions[selectedSuggestionIndex]
+                // );
+                return;
+              }
+            }
           }}
         />
         <Clear onClick={() => setValue("")}>Clear</Clear>
@@ -55,7 +94,9 @@ const Typeahead = ({ suggestions, handleSelect }) => {
 
             //use a return statement in order to include the above code
             return (
-              <SearchResultItem>
+              <SearchResultItem
+                key={match.id} //this is to remove that error, there is an id for ever result in the data file
+              >
                 <span>
                   {/* First Half */}
                   {/* the resulting match is a slice, from the beginning, to
