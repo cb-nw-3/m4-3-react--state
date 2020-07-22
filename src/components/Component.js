@@ -10,7 +10,7 @@ function Suggestion(props) {
   let inputPart;
   let maxValue = 0;
   return <ul>
-    {props.data.map(book => {
+    {props.data.map((book, index) => {
       if (book.title.toLowerCase().includes(props.value.toLowerCase()) && props.value.length > 1 && maxValue < 5) {
         maxValue++;
 
@@ -18,9 +18,9 @@ function Suggestion(props) {
         inputPart = book.title.slice(inputIndex, inputIndex + props.value.length);
         firstPart = book.title.slice(0, inputIndex);
         secondPart = book.title.slice(inputIndex + props.value.length);
-
+        console.log(maxValue, props.index)
         return <StyledLink href="" key={book.id}>
-          <StyledListItem>
+          <StyledListItem className={maxValue - 1 === props.index ? 'selected' : undefined}>
             <FirstPart>{firstPart}</FirstPart>
             <InputPart>{inputPart}</InputPart>
             <SecondPart>{secondPart}</SecondPart> 
@@ -38,7 +38,7 @@ const StyledListItem = styled.li`
   margin: 5px;
   padding: 5px;
 
-  &:hover {
+  &:selected {
     background-color: #fef6e4;
   }
 `

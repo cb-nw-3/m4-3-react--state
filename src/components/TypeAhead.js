@@ -9,6 +9,8 @@ function TypeAhead(props) {
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
 
   let maxValue = 5;
+  let suggestions = props.data.filter(book => book.title.toLowerCase().includes(value.toLowerCase())).splice(0, maxValue);
+  let nextSuggestionIndex = selectedSuggestionIndex;
 
   return <InputContainer>
     <ComponentContainer>
@@ -19,23 +21,37 @@ function TypeAhead(props) {
           setValue(ev.target.value);
         }}
         onKeyDown={(ev) => {
-          
-          let suggestions = props.data.filter(book => book.title.toLowerCase().includes(value.toLowerCase())).splice(0, maxValue)
+          suggestions = props.data.filter(book => book.title.toLowerCase().includes(value.toLowerCase())).splice(0, maxValue)
           
           console.log('suggestions', suggestions)
           if (ev.key === 'Enter') {
             alert(ev.target.value)
             // handleSelect(ev.target.value);
           } else if (ev.key === 'Arrowup') {
-            setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+            nextSuggestionIndex = selectedSuggestionIndex - 1;
+            if (nextSuggestionIndex === -1) {
+              nextSuggestionIndex = 4;
+            }
+            setSelectedSuggestionIndex(nextSuggestionIndex);
             return;
           } else if (ev.key === 'ArrowDown') {
-            setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+            nextSuggestionIndex = selectedSuggestionIndex + 1;
+            if (nextSuggestionIndex === 5) {
+              nextSuggestionIndex = 0;
+            }
+            setSelectedSuggestionIndex(nextSuggestionIndex);
             return;
           }
         }}
       ></StyledInput>
-      <Component data={data.books} value={value} categories={data.categories}></Component>
+      {console.log('nextSugInd', nextSuggestionIndex)}
+      <Component 
+        data={data.books} 
+        value={value} 
+        categories={data.categories} 
+        suggestions={suggestions} 
+        index={nextSuggestionIndex}
+      ></Component>
     </ComponentContainer>
     <ClearButton onClick={() => setValue('')}>Clear</ClearButton>
   </InputContainer>
