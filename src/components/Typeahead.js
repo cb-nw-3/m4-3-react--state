@@ -28,11 +28,15 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                 break;
 
               case 'ArrowUp':
-                setSuggestedIndex(suggestedIndex - 1);
+                setSuggestedIndex(suggestedIndex < 1 ? 0 : suggestedIndex - 1);
                 break;
 
               case 'ArrowDown':
-                setSuggestedIndex(suggestedIndex + 1);
+                setSuggestedIndex(
+                  suggestedIndex >= matchedSuggestions.length - 1
+                    ? suggestedIndex
+                    : suggestedIndex + 1
+                );
                 break;
             }
           }}
@@ -109,21 +113,21 @@ const Ul = styled.ul`
   -webkit-box-shadow: 3px 3px 5px 6px #ccc; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
   -moz-box-shadow: 3px 3px 5px 6px #ccc; /* Firefox 3.5 - 3.6 */
   box-shadow: 3px 3px 5px 6px #ccc;
-  &:hover li:first-child {
+  /* &:hover li:first-child {
     background-color: white;
-  }
+  } */
 `;
 
 const Suggestion = styled.li`
   border-radius: 6px;
   padding-left: 15px;
   margin-bottom: 5px;
-  &:hover {
+  /* &:hover {
     background-color: yellow !important;
   }
   &:first-child {
     background-color: yellow;
-  }
+  } */
 `;
 
 export default Typeahead;
