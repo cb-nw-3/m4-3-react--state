@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import Suggestion from "./Suggestion";
+import BookListing from "./BookListing";
 
 function Typeahead({ suggestions }) {
   //console.log("Typeahead");
@@ -13,9 +14,9 @@ function Typeahead({ suggestions }) {
   let suggestion_array = [];
 
   let testdave = true;
+
   function findBook(event) {
     let bookSearchText = event.target.value.toLowerCase();
-
     let books_suggested = suggestions.books.filter((e) =>
       e.title.toLowerCase().includes(bookSearchText)
     );
@@ -27,7 +28,9 @@ function Typeahead({ suggestions }) {
     setTextField(event.target.value);
 
     books_suggested.forEach((bookFromList) => {
-      suggestion_array.push(<Suggestion Book={bookFromList} />);
+      suggestion_array.push(
+        <Suggestion Book={bookFromList} SearchTerm={event.target.value} />
+      );
     });
     console.log(booklist.length);
 
