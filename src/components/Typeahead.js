@@ -47,14 +47,21 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             // since now we're handling multiple different values for
             // ev.key. This is an optional change, though; we could
             // still do it with if/else-if.
+            // console.log("START:", selectedSuggestionIndex);
             switch (event.key) {
               case "Enter": {
                 handleSelect(event.target.value);
                 return;
               }
               case "ArrowUp": {
+                // console.log("index:", selectedSuggestionIndex);
                 setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
 
+                // This is make sure the user cannot use the up arrow on the first
+                //search result, i.e. the first result will always be yellow
+                if (selectedSuggestionIndex <= 0) {
+                  setSelectedSuggestionIndex(0);
+                }
                 //This console.log allows me to see what index im at for every
                 //key press, and what suggestion is being selected
                 // console.log(
@@ -65,7 +72,14 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                 return;
               }
               case "ArrowDown": {
+                // console.log("index:", selectedSuggestionIndex);
                 setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+
+                // This is make sure the user cannot use the down arrow on the last
+                //search result, i.e. the last result will always be yellow
+                if (selectedSuggestionIndex >= matchedSuggestions.length - 1) {
+                  setSelectedSuggestionIndex(matchedSuggestions.length - 1);
+                }
                 // console.log(
                 //   event.key,
                 //   selectedSuggestionIndex,
@@ -224,9 +238,9 @@ const SearchResultList = styled.ul`
     /* font-weight: 600; */
   }
 
-  & li:first-child {
+  /* & li:first-child {
     background: lightyellow;
-  }
+  } */
 `;
 
 const SearchResultItem = styled.li``;
