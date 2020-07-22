@@ -11,7 +11,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
     suggestions.filter((book) =>
       book.title.toLowerCase().includes(value.toLowerCase())
     );
-
+  let selected = false;
   return (
     <>
       <Wrapper>
@@ -20,11 +20,18 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           type='text'
           value={value}
           placeholder='Enter a book title'
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            selected = false;
+            setValue(e.target.value);
+            setSuggestedIndex(0);
+            matchedSuggestions = [{ title: '' }];
+          }}
           onKeyDown={(e) => {
             switch (e.key) {
               case 'Enter':
                 handleSelect(matchedSuggestions[suggestedIndex].title);
+                setValue(matchedSuggestions[suggestedIndex].title);
+                selected = true;
                 break;
 
               case 'ArrowUp':
@@ -38,22 +45,18 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                     : suggestedIndex + 1
                 );
                 break;
+              default:
             }
           }}
         ></Input>
         <ClearBtn
           onClick={() => {
             setValue('');
+            setSuggestedIndex(0);
+            selected = false;
           }}
         >
           Clear
-        </ClearBtn>
-        <ClearBtn
-          onClick={() => {
-            setSuggestedIndex(suggestedIndex + 1);
-          }}
-        >
-          {suggestedIndex}
         </ClearBtn>
       </Wrapper>
       {!!matchedSuggestions.length && (
@@ -70,6 +73,9 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                   background: isSelected
                     ? 'hsla(50deg, 100%, 80%, 0.25)'
                     : 'transparent',
+                }}
+                onMouseEnter={() => {
+                  setSuggestedIndex(i);
                 }}
               >
                 <MatchFormatter book={element} string={value} />
