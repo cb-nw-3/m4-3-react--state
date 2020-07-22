@@ -92,10 +92,19 @@ const Typeahead = ({ suggestions, handleSelect }) => {
               .toLowerCase()
               .indexOf(value.toLowerCase());
 
+            //this will check if the index of the result matches with what the user
+            //wants as the search index to be, from using the up and down arrows
+            const isSelected = selectedSuggestionIndex === index;
+
             //use a return statement in order to include the above code
             return (
               <SearchResultItem
                 key={match.id} //this is to remove that error, there is an id for ever result in the data file
+                style={{
+                  background: isSelected
+                    ? "hsla(50deg, 100%, 80%, 0.25)"
+                    : "transparent",
+                }}
               >
                 <span>
                   {/* First Half */}
