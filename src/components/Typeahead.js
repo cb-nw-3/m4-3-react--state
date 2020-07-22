@@ -66,6 +66,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                 key={i}
                 onClick={(e) => {
                   handleSelect(matchedSuggestions[i].title);
+                  setValue(matchedSuggestions[i].title);
                 }}
                 style={{
                   background: isSelected
