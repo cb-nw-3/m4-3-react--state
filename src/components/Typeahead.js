@@ -8,6 +8,8 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
 
     const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
 
+    const [displayingSuggestions, setDisplayingSuggestions] = React.useState(false);
+
     let matchedSuggestions = suggestions
         .filter((suggestion) => {
             const minimumCharacters = value.length > 1;
@@ -18,27 +20,46 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
             return minimumCharacters && containValue;
         })
 
+    const showSuggestions = matchedSuggestions.length > 0 && displayingSuggestions;
+
     return (
         <div>
             <Search>
                 <Input
                     type='text'
                     value={value}
-                    onChange={(ev) => setValue(ev.target.value)}
+                    onChange={(ev) => {
+                        setValue(ev.target.value);
+                        if (ev.target.value.length >= 1) {
+                            setDisplayingSuggestions(true);
+                        }
+                    }}
                     onKeyDown={(ev) => {
                         switch (ev.key) {
                             case "Enter": {
                                 handleSelect(ev.target.value);
                                 return;
                             }
-                            case ("ArrowUp" && selectedSuggestionIndex > 0): {
-                                ev.preventDefault();
-                                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                            case "ArrowUp": {
+                                if (matchedSuggestions.length >= 1) {
+                                    if (selectedSuggestionIndex === 0) {
+                                        return;
+                                    }
+                                    setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                                }
                                 return;
                             }
-                            case ("ArrowDown"): {
-                                ev.preventDefault();
-                                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                            case "ArrowDown": {
+                                if (matchedSuggestions.length >= 1) {
+                                    if (selectedSuggestionIndex === matchedSuggestions.length - 1) {
+                                        return;
+                                    }
+                                    setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                                }
+                                return;
+                            }
+                            case "Escape": {
+                                setDisplayingSuggestions(false);
                                 return;
                             }
                         }
@@ -46,7 +67,7 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
                 />
                 <Button onClick={() => setValue('')}>Clear</Button>
             </Search>
-            {matchedSuggestions.length > 0 && (<SuggestionList>
+            {showSuggestions && (<SuggestionList>
                 {matchedSuggestions.map((suggestion, index) => {
 
                     const isSelected = selectedSuggestionIndex === index;
