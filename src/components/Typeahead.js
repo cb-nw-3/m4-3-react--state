@@ -5,10 +5,16 @@ const Typeahead = ({ suggestions, handleSelect }) => {
   //this state sets the current value of the user input
   const [value, setValue] = React.useState("");
 
-  //this is to make sure that the suggestions list only renders
+  //this state is to make sure that the suggestions list only renders
   //when the isVisible variable is set to true, triggered when there
   //is an existing match from input and user is on the input element
   const [isVisible, setIsVisible] = React.useState(false);
+
+  //this state manages the indices of the search results, index of course starts at 0
+  //the first search return if there is one.
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
 
   //this will filter out the { suggestions } props to ones that match
   //user input, to validate through case-sensitivity, we compare the user
@@ -22,14 +28,8 @@ const Typeahead = ({ suggestions, handleSelect }) => {
   //if there are any matching suggestions, return a true boolean
   //the user input must be greater than 2 characters and the user must be
   //on the input element
-  const showSuggestions =
+  let showSuggestions =
     matchedSuggestions.length > 0 && isVisible && value.length > 2;
-
-  //this state manages the indices of the search results, index of course starts at 0
-  //the first search return if there is one.
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
-    0
-  );
 
   return (
     <Wrapper>
@@ -43,11 +43,9 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             setIsVisible(true);
           }}
           onKeyDown={(event) => {
-            // Switching from if/else to a "switch" statement,
-            // since now we're handling multiple different values for
-            // ev.key. This is an optional change, though; we could
-            // still do it with if/else-if.
             // console.log("START:", selectedSuggestionIndex);
+            // console.log(event.key);
+
             switch (event.key) {
               case "Enter": {
                 handleSelect(event.target.value);
@@ -85,6 +83,13 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                 //   selectedSuggestionIndex,
                 //   matchedSuggestions[selectedSuggestionIndex]
                 // );
+                return;
+              }
+              case "Escape": {
+                //if the user presses the escape key, then the dropdown dissapears
+                //because the state changed, and the showSuggestions bool becomes false
+                //therefore unable to render the <SearchResultList> element
+                setIsVisible(false);
                 return;
               }
             }
@@ -243,6 +248,7 @@ const SearchResultList = styled.ul`
   } */
 `;
 
+// I dont think i needed this, but it makes reading the elements easier
 const SearchResultItem = styled.li``;
 
 const Prediction = styled.span`
