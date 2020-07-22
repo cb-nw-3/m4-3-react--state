@@ -187,6 +187,10 @@ const Clear = styled.button`
     cursor: pointer;
   }
 
+  &:focus {
+    outline: 2px solid dodgerblue;
+  }
+
   &:active {
     transform: scale(0.95);
   }
