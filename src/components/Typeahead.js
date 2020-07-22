@@ -11,7 +11,8 @@ const Typeahead = ({ suggestions, handleSelect }) => {
     suggestions.filter((book) =>
       book.title.toLowerCase().includes(value.toLowerCase())
     );
-  let selected = false;
+
+  console.log();
   return (
     <>
       <Wrapper>
@@ -21,7 +22,6 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           value={value}
           placeholder='Enter a book title'
           onChange={(e) => {
-            selected = false;
             setValue(e.target.value);
             setSuggestedIndex(0);
             matchedSuggestions = [{ title: '' }];
@@ -31,7 +31,6 @@ const Typeahead = ({ suggestions, handleSelect }) => {
               case 'Enter':
                 handleSelect(matchedSuggestions[suggestedIndex].title);
                 setValue(matchedSuggestions[suggestedIndex].title);
-                selected = true;
                 break;
 
               case 'ArrowUp':
@@ -53,13 +52,12 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           onClick={() => {
             setValue('');
             setSuggestedIndex(0);
-            selected = false;
           }}
         >
           Clear
         </ClearBtn>
       </Wrapper>
-      {!!matchedSuggestions.length && (
+      {!!matchedSuggestions.length && matchedSuggestions[0].title !== value && (
         <Ul>
           {matchedSuggestions.map((element, i) => {
             const isSelected = i === suggestedIndex;
