@@ -7,7 +7,8 @@ import styled from 'styled-components';
 
 const Typeahead = ({suggestions, categories, handleSelect}) => {
     const [value, setValue] = React.useState('');
-    let matchedSuggestions = suggestions;
+    let matchedSuggestions = suggestions.filter(suggestion => suggestion.title.toLowerCase().includes(value.toLowerCase()));
+    const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
 
     return (
     <>
@@ -26,18 +27,23 @@ const Typeahead = ({suggestions, categories, handleSelect}) => {
       </ClearButton>
       
     </Wrapper>
-    <Unlisted>
-        {matchedSuggestions.map((suggestion) => {
+    <Suggestion>
+        {value.length >= 2 && matchedSuggestions.map((suggestion, index) => {
+          const isSelected = selectedSuggestionIndex === index;
           return (
-            <li
+            <SuggestionList
               key={suggestion.id}
-              onClick={() => handleSelect(suggestion, suggestion.title)}
+              style={{background: isSelected ? '#FFFF99' : 'transparent',
+            }}
+              onClick={() => handleSelect(suggestion.title)}
+              onMouseEnter={() => {setSelectedSuggestionIndex(index);
+              }}
               >
                 {suggestion.title}
-            </li>
+            </SuggestionList>
           );
         })}
-    </Unlisted>
+    </Suggestion>
     </>
     );
 };
@@ -61,10 +67,20 @@ const ClearButton = styled.button`
     width: 80px;
     font-size: 15px;
     border-radius: 5px;
-
 `;
 
-const Unlisted = styled.ul`
+const Suggestion = styled.li`
   display: inline;
+  list-style-type: none;
+  border: solid 1px lightgrey;
+  margin-top: 5px;
+  
+  
+`
+
+const SuggestionList = styled.li`
+  padding: 10px;
+  width: 400px;
+  
 `
 export default Typeahead;
