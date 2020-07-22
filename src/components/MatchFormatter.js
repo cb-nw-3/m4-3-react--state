@@ -8,7 +8,7 @@ const MatchFormatter = ({ book, string = '' }) => {
   const secondHalf = book.title.slice(index - 1);
   let textCategory = '';
   if (book.categoryId !== undefined) {
-    textCategory = ' as ' + categories[book.categoryId].name;
+    textCategory = ' in ' + categories[book.categoryId].name;
   }
   return (
     <>

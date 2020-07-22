@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import MatchFormatter from './MatchFormatter';
 
 const Typeahead = ({ suggestions, handleSelect }) => {
-  let showUl = false;
   const [value, setValue] = useState('');
-  const [index, setIndex] = useState(0);
+  const [suggestedIndex, setSuggestedIndex] = useState(0);
   let matchedSuggestions = [{ title: '' }];
   matchedSuggestions =
     value.length > 1 &&
@@ -25,15 +24,15 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           onKeyDown={(e) => {
             switch (e.key) {
               case 'Enter':
-                handleSelect(e.target.value);
+                handleSelect(matchedSuggestions[suggestedIndex].title);
                 break;
 
               case 'ArrowUp':
-                setIndex(index - 1);
+                setSuggestedIndex(suggestedIndex - 1);
                 break;
 
               case 'ArrowDown':
-                setIndex(index + 1);
+                setSuggestedIndex(suggestedIndex + 1);
                 break;
             }
           }}
@@ -45,19 +44,34 @@ const Typeahead = ({ suggestions, handleSelect }) => {
         >
           Clear
         </ClearBtn>
+        <ClearBtn
+          onClick={() => {
+            setSuggestedIndex(suggestedIndex + 1);
+          }}
+        >
+          {suggestedIndex}
+        </ClearBtn>
       </Wrapper>
       {!!matchedSuggestions.length && (
         <Ul>
-          {matchedSuggestions.map((element, index) => (
-            <Suggestion
-              key={index}
-              onClick={(e) => {
-                handleSelect(matchedSuggestions[index].title);
-              }}
-            >
-              <MatchFormatter book={element} string={value} />
-            </Suggestion>
-          ))}
+          {matchedSuggestions.map((element, i) => {
+            const isSelected = i === suggestedIndex;
+            return (
+              <Suggestion
+                key={i}
+                onClick={(e) => {
+                  handleSelect(matchedSuggestions[i].title);
+                }}
+                style={{
+                  background: isSelected
+                    ? 'hsla(50deg, 100%, 80%, 0.25)'
+                    : 'transparent',
+                }}
+              >
+                <MatchFormatter book={element} string={value} />
+              </Suggestion>
+            );
+          })}
         </Ul>
       )}
     </>
