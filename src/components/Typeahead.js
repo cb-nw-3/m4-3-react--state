@@ -69,7 +69,7 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
       <StyledButton onClick={() => setValue("")}>Clear</StyledButton>
       <StyledUl
         style={{
-          visibility: renderedSuggestions.length > 1 ? "visible" : "hidden",
+          visibility: renderedSuggestions.length > 0 ? "visible" : "hidden",
         }}
       >
         {renderedSuggestions.map((suggestion, index) => {
