@@ -105,6 +105,11 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                     ? "hsla(50deg, 100%, 80%, 0.25)"
                     : "transparent",
                 }}
+                onMouseEnter={() => {
+                  //mousing over an item should select that item by its index
+                  //update the state that holds that index
+                  setSelectedSuggestionIndex(index);
+                }}
               >
                 <span>
                   {/* First Half */}
