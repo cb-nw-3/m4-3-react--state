@@ -36,7 +36,7 @@ Most of these results have the word "the" in them explicitly. The third item, "T
 
 You should use a `<ul>` and `<li>`.
 
-> HINT: You'll want to use `filter` to winnow down the list of suggestions, and then use `map` to render an `<li>` for each matched result.
+> HINT: You'll want to use `filter` to window down the list of suggestions, and then use `map` to render an `<li>` for each matched result.
 
 Next, we'll need to be able to tell when the user selects one of the suggestions. There are two ways this can happen:
 
