@@ -37,7 +37,7 @@ const Typeahead = ({ suggestions, handleSelect, categories }) => {
                     onKeyDown={(ev) => {
                         switch (ev.key) {
                             case "Enter": {
-                                handleSelect(ev.target.value);
+                                handleSelect(matchedSuggestions[selectedSuggestionIndex].title);
                                 return;
                             }
                             case "ArrowUp": {
