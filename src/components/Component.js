@@ -4,21 +4,22 @@ import styled from 'styled-components'
 
 function Suggestion(props) {
   console.log('Suggestion', props)
+  // variables initiation
   let firstPart;
   let secondPart;
   let inputIndex;
   let inputPart;
+  // maxValue will change to keep track of suggestions length
   let maxValue = 0;
   return <ul>
-    {props.data.map((book, index) => {
-      if (book.title.toLowerCase().includes(props.value.toLowerCase()) && props.value.length > 1 && maxValue < 5) {
+    {props.data.map(book => {
+      if (book.title.toLowerCase().includes(props.value.toLowerCase()) && props.value.length > 1 && maxValue < props.suggestions.length) {
         maxValue++;
-
+        // grab input value and bold the rest of book title
         inputIndex = book.title.toLowerCase().indexOf(props.value.toLowerCase());
         inputPart = book.title.slice(inputIndex, inputIndex + props.value.length);
         firstPart = book.title.slice(0, inputIndex);
         secondPart = book.title.slice(inputIndex + props.value.length);
-        console.log(maxValue, props.index)
         return <StyledLink href="" key={book.id}>
           <StyledListItem className={maxValue - 1 === props.index ? 'selected' : undefined}>
             <FirstPart>{firstPart}</FirstPart>
@@ -38,16 +39,13 @@ const StyledListItem = styled.li`
   margin: 5px;
   padding: 5px;
 
-  &:selected {
+  &.selected {
     background-color: #fef6e4;
   }
 `
 const StyledLink = styled.a`
   text-decoration: none;
   color: black;
-  &:focus ${StyledListItem} {
-    background-color: #fef6e4;
-  }
 `
 const FirstPart = styled.span`
   font-weight: bold;

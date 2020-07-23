@@ -5,15 +5,20 @@ import Component from './Component';
 import data from '../data';
 
 function TypeAhead(props) {
+  // create react state
   const [value, setValue] = React.useState('');
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
 
-  let maxValue = 5;
+  // max amount of suggestions
+  const maxValue = 5;
+  // suggestions array depending on input value
   let suggestions = props.data.filter(book => book.title.toLowerCase().includes(value.toLowerCase())).splice(0, maxValue);
+  // index variable for keyboard navigation
   let nextSuggestionIndex = selectedSuggestionIndex;
 
   return <InputContainer>
     <ComponentContainer>
+      {/* Input component */}
       <StyledInput 
         type="text"
         value={value}
@@ -21,30 +26,34 @@ function TypeAhead(props) {
           setValue(ev.target.value);
         }}
         onKeyDown={(ev) => {
-          suggestions = props.data.filter(book => book.title.toLowerCase().includes(value.toLowerCase())).splice(0, maxValue)
-          
           console.log('suggestions', suggestions)
+          // if enter key press alert book title
           if (ev.key === 'Enter') {
-            alert(ev.target.value)
-            // handleSelect(ev.target.value);
-          } else if (ev.key === 'Arrowup') {
+            alert(suggestions[nextSuggestionIndex].title)
+          // if arrow up move selection up
+          } else if (ev.key === 'ArrowUp') {
             nextSuggestionIndex = selectedSuggestionIndex - 1;
+            // make selection loop
             if (nextSuggestionIndex === -1) {
-              nextSuggestionIndex = 4;
+              nextSuggestionIndex = suggestions.length - 1;
             }
+            // updates the state of said state?
             setSelectedSuggestionIndex(nextSuggestionIndex);
             return;
+          // if arrow down move selection down
           } else if (ev.key === 'ArrowDown') {
             nextSuggestionIndex = selectedSuggestionIndex + 1;
-            if (nextSuggestionIndex === 5) {
+            // make selection loop
+            if (nextSuggestionIndex === suggestions.length) {
               nextSuggestionIndex = 0;
             }
+            // updates the state of said state?
             setSelectedSuggestionIndex(nextSuggestionIndex);
             return;
           }
         }}
       ></StyledInput>
-      {console.log('nextSugInd', nextSuggestionIndex)}
+      {/* Suggestions under input, named Component because brain fart and lazy to rename */}
       <Component 
         data={data.books} 
         value={value} 
