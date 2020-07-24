@@ -29,28 +29,61 @@ function Typeahead({ suggestion, handleSelect }) {
             Clear
           </Button>
         </div>
-        <BookDisplay suggestion={suggestion} value={value} />
+        <BookDisplay
+          suggestion={suggestion}
+          value={value}
+          handleSelect={handleSelect}
+        />
       </div>
     </div>
   );
 }
 
-const BookDisplay = ({ suggestion, value }) => {
+const BookDisplay = ({ suggestion, value, handleSelect }) => {
   console.log(value);
   if (value.length !== 0) {
     return (
-      <ul>
+      <BookListContainer>
         {suggestion.map((book) => {
           if (book.id.includes(value)) {
-            return <li>{book.id}</li>;
+            return (
+              <Suggestion key={book.id} onClick={() => handleSelect(book.id)}>
+                <strong>{book.id} </strong>
+                <span
+                  style={{
+                    fontSize: "0.7em",
+                    fontStyle: "italic",
+                    color: "#2701d2",
+                  }}
+                >
+                  in {book.categoryId}
+                </span>
+              </Suggestion>
+            );
           }
         })}
-      </ul>
+      </BookListContainer>
     );
   } else {
     return <div></div>;
   }
 };
+
+const Suggestion = styled.li`
+  list-style: none;
+  padding: 10px 5px;
+
+  &:hover {
+    background: #fefbe6;
+    cursor: pointer;
+  }
+`;
+
+const BookListContainer = styled.ul`
+  margin-top: 10px;
+  width: 300px;
+  box-shadow: 0px 0px 10px #eaeaea;
+`;
 
 const Input = styled.input`
   border: 2px solid #eaeaea;
