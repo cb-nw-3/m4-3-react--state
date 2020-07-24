@@ -1,20 +1,27 @@
 import React from "react";
 import styled from "styled-components";
-
+import BookList from "./BookList";
 function Typeahead(props) {
   const [value, setValue] = React.useState("");
-  const { suggestions } = props;
+  const { suggestions, handleSelect } = props;
+  let refinedSuggestions = [];
+  if (value.length > 1) {
+    refinedSuggestions = suggestions.filter((Element) => {
+      return Element.title.toLowerCase().includes(value.toLowerCase());
+    });
+  }
+
   return (
-    <BookData>
+    <InputData>
       <BookInput
         value={value}
         placeholder="The designs"
         onChange={(ev) => {
           setValue(ev.target.value);
-          if (ev.target.value.length > 2) {
-            refinedSuggestions = suggestions.filter((Element) =>
-              Element.title.toLowerCase().includes(value)
-            );
+        }}
+        onKeyDown={(ev) => {
+          if (ev.key == "Enter") {
+            handleSelect(ev.target.value);
           }
         }}
       />
@@ -25,28 +32,27 @@ function Typeahead(props) {
       >
         Clear
       </ClearBtn>
-      <SuggestionList refinedSuggestions={refinedSuggestions} />
-    </BookData>
+      <BookList
+        refinedSuggestions={refinedSuggestions}
+        handleSelect={handleSelect}
+      />
+    </InputData>
   );
 }
 
-const SuggestionList = styled.ul``;
-const Suggestion = styled.li``;
-const BookData = styled.div`
+const InputData = styled.div`
   height: 30px;
-  text-align: center;
 `;
+
 const BookInput = styled.input`
-  height: 100%;
   width: 300px;
+  height: 100%;
 `;
 const ClearBtn = styled.button`
   background-color: blue;
-  border-radius: 5px;
   color: white;
-  width: 75px;
   height: 100%;
-  margin-left: 1%;
+  width: 75px;
 `;
 
 export default Typeahead;

@@ -11,7 +11,7 @@ const App = (props) => {
         <Typeahead
           suggestions={data.books}
           handleSelect={(suggestion) => {
-            window.alert(suggestion);
+            alert(suggestion);
           }}
         />
       </Wrapper>
@@ -22,6 +22,8 @@ const App = (props) => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
   height: 100vh;
   justify-content: center;
 `;
