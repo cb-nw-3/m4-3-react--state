@@ -56,7 +56,6 @@ const Suggestions = styled.li`
 function FindBook({ value, bookTitles, handleSelect }) {
     let bookArr = bookTitles.filter(title => title.toLowerCase().includes(value.toLowerCase()));
 
-    console.log(bookArr);
     if (value.length > 2) {
         return (
             bookArr.map(book => {
@@ -95,6 +94,22 @@ function Typeahead({ suggestions, handleSelect }) {
 
     // onKeyDown should trigger an alert with the title of the book. Ok.
 
+    // ex. 3 thoughts
+
+    // If I read the hints, it seems like I should re-implement the suggestions
+    // logic. I really don't like that, but fine. whatever.
+
+
+    let bookArr = bookTitles.filter(title => title.toLowerCase().includes(value.toLowerCase()));
+
+    let suggestionExist;
+
+    if (bookArr.length === 27 || bookArr.length === 0) {
+        suggestionExist = false;
+    } else {
+        suggestionExist = true;
+    }
+
     return (
         <Wrapper>
             <Input>
@@ -114,9 +129,12 @@ function Typeahead({ suggestions, handleSelect }) {
                 <InputButton onClick={() => setValue('')}>Clear</InputButton>
 
             </Input>
-            <BookList>
-                <FindBook value={value} bookTitles={bookTitles} handleSelect={handleSelect} />
-            </BookList>
+
+            {suggestionExist &&
+                <BookList>
+                    <FindBook value={value} bookTitles={bookTitles} handleSelect={handleSelect} />
+                </BookList>
+            }
         </Wrapper>
     )
 };
