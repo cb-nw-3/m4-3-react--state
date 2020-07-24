@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import data from '../data';
+import data, { categories } from '../data';
 
 import GlobalStyles from './GlobalStyles';
 
@@ -21,6 +21,7 @@ const App = (props) => {
         handleSelect={(suggestion => {
           window.alert(suggestion)
         })}
+        categories={categories}
       />
     </Wrapper>
   );

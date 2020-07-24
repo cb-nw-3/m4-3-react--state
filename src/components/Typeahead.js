@@ -53,13 +53,24 @@ const Suggestions = styled.li`
 // We also have the books array, in the form of the suggestions variable, but we
 // want to search through only the list of book titles.
 
-function FindBook({ value, bookTitles, handleSelect }) {
-    let bookArr = bookTitles.filter(title => title.toLowerCase().includes(value.toLowerCase()));
+function FindBook({ value, bookTitles, handleSelect, categories, bookData }) {
+    let bookTitleArr = bookTitles.filter(title => title.toLowerCase().includes(value.toLowerCase()));
+
+    // I want bookArr to actually contain an array of books and types
+    // something like. ["Book Title", "Genre"]
+
+    let bookArr = [];
+
+    bookTitleArr.forEach(title => {
+        let bookIdx = bookData.find(book => book.title === title);
+        bookArr.push([title, categories[bookIdx.categoryId]["name"]]);
+    })
 
     if (value.length > 2) {
         return (
             bookArr.map(book => {
-                return <Suggestions onClick={(ev) => { handleSelect(ev.target.innerText) }}>{book}</Suggestions>
+                // category logic goes here, I guess
+                return <Suggestions onClick={(ev) => { handleSelect(ev.target.innerText) }}>{book[0]} - {book[1]}</Suggestions>
             })
         )
     } else {
@@ -68,7 +79,7 @@ function FindBook({ value, bookTitles, handleSelect }) {
 }
 
 
-function Typeahead({ suggestions, handleSelect }) {
+function Typeahead({ suggestions, handleSelect, categories }) {
 
     // Pretty sure that setValue is just an arbitrary name set by convention
     // to match with the first one
@@ -132,7 +143,7 @@ function Typeahead({ suggestions, handleSelect }) {
 
             {suggestionExist &&
                 <BookList>
-                    <FindBook value={value} bookTitles={bookTitles} handleSelect={handleSelect} />
+                    <FindBook value={value} bookTitles={bookTitles} handleSelect={handleSelect} categories={categories} bookData={suggestions} />
                 </BookList>
             }
         </Wrapper>
