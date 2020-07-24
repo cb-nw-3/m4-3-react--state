@@ -10,7 +10,7 @@ function Typeahead(props) {
     refinedSuggestions = suggestions.filter((Element) => {
       return Element.title.toLowerCase().includes(value.toLowerCase());
     });
-    returnedSuggestions = refinedSuggestions.length > 1 ? true : false;
+    returnedSuggestions = refinedSuggestions.length > 0 ? true : false;
   }
 
   return (
@@ -38,6 +38,7 @@ function Typeahead(props) {
         returnedSuggestions={returnedSuggestions}
         refinedSuggestions={refinedSuggestions}
         handleSelect={handleSelect}
+        value={value}
       />
     </InputData>
   );

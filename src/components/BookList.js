@@ -1,27 +1,11 @@
 import React from "react";
-import styled from "styled-components";
+import Book from "./Book";
 
 function BookList(props) {
-  const { refinedSuggestions, handleSelect } = props;
+  const { refinedSuggestions, handleSelect, value } = props;
   return refinedSuggestions.map((element) => {
-    return (
-      <Book
-        onClick={() => {
-          handleSelect(element.title);
-        }}
-      >
-        {element.title}
-      </Book>
-    );
+    return <Book handleSelect={handleSelect} book={element} value={value} />;
   });
 }
-const Book = styled.li`
-  line-height: 1.75em;
-  list-style-type: none;
-
-  &: hover {
-    background-color: yellow;
-  }
-`;
 
 export default BookList;
