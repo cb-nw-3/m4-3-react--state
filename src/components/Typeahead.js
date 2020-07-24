@@ -40,27 +40,28 @@ function Typeahead({ suggestion, handleSelect }) {
 }
 
 const BookDisplay = ({ suggestion, value, handleSelect }) => {
-  console.log(value);
+  let suggestionArray = suggestion.filter((book) => {
+    return book.id.includes(value);
+  });
+
   if (value.length !== 0) {
     return (
       <BookListContainer>
-        {suggestion.map((book) => {
-          if (book.id.includes(value)) {
-            return (
-              <Suggestion key={book.id} onClick={() => handleSelect(book.id)}>
-                <strong>{book.id} </strong>
-                <span
-                  style={{
-                    fontSize: "0.7em",
-                    fontStyle: "italic",
-                    color: "#2701d2",
-                  }}
-                >
-                  in {book.categoryId}
-                </span>
-              </Suggestion>
-            );
-          }
+        {suggestionArray.map((book) => {
+          return (
+            <Suggestion key={book.id} onClick={() => handleSelect(book.id)}>
+              {book.id}{" "}
+              <span
+                style={{
+                  fontSize: "0.7em",
+                  fontStyle: "italic",
+                  color: "#2701d2",
+                }}
+              >
+                in {book.categoryId}
+              </span>
+            </Suggestion>
+          );
         })}
       </BookListContainer>
     );
