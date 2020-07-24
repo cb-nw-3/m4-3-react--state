@@ -28,6 +28,7 @@ const Typeahead = ({suggestions, categories, handleSelect}) => {
       
     </Wrapper>
     <Suggestion>
+       
         {value.length >= 2 && matchedSuggestions.map((suggestion, index) => {
           const isSelected = selectedSuggestionIndex === index;
           return (
@@ -39,7 +40,14 @@ const Typeahead = ({suggestions, categories, handleSelect}) => {
               onMouseEnter={() => {setSelectedSuggestionIndex(index);
               }}
               >
-                {suggestion.title}
+               
+                <span>
+                {suggestion.title.slice(0 ,suggestion.title.toLowerCase().indexOf(value)+ value.length)}
+                  <Prediction>
+                  {suggestion.title.slice(suggestion.title.toLowerCase().indexOf(value) + value.length)}
+                  </Prediction>
+                </span> 
+                &nbsp;in <BookCategory>{suggestion.categoryId}</BookCategory>
             </SuggestionList>
           );
         })}
@@ -81,6 +89,15 @@ const Suggestion = styled.li`
 const SuggestionList = styled.li`
   padding: 10px;
   width: 400px;
-  
 `
+
+const Prediction = styled.span`
+  font-weight: bold;
+`;
+
+const BookCategory = styled.span`
+  color: purple;
+  font-style: italic;
+`
+
 export default Typeahead;

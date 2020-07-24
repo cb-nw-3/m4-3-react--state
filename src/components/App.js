@@ -14,6 +14,7 @@ const App = (props) => {
           categories={data.categories}
           //when I enter a word in the input field, there's an alert with the same word
           handleSelect={(suggestion) => window.alert(suggestion)}
+          categories={data.categories}
         />
       </Wrapper>
     </>
