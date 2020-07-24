@@ -18,10 +18,28 @@ const Typeahead = ({suggestions, categories, handleSelect}) => {
         value={value}
         onChange={(ev) => setValue(ev.target.value)}
         onKeyDown={(ev) => {
-          if (ev.key === 'Enter') {
-            handleSelect(ev.target.value);
+          // Switching from if/else to a "switch" statement,
+          // since now we're handling multiple different values for
+          // ev.key. This is an optional change, though; we could
+          // still do it with if/else-if.
+          switch (ev.key) {
+            case "Enter": {
+              handleSelect(ev.target.value);
+              return;
+            }
+            case "ArrowUp": {
+              // TODO: Handle moving the selection up
+              setSelectedSuggestionIndex(selectedSuggestionIndex -1);
+              return;
+            }
+            case "ArrowDown": {
+              // TODO: Handle moving the selection down
+              setSelectedSuggestionIndex(selectedSuggestionIndex +1);
+              return;
+            }
           }
-        }}></Input>
+        }}
+        ></Input>
       
       <ClearButton onClick={() => setValue('')}>Clear
       </ClearButton>
