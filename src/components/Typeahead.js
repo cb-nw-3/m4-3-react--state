@@ -47,6 +47,15 @@ const Suggestions = styled.li`
     }
 `
 
+let Prediction = styled.span`
+    font-weight: bold;
+`
+
+let BookSpan = styled.span`
+    color: purple;
+    font-style: italic;
+`
+
 // ok. I think we clearly want Array.includes(), since that'll return a true/false
 // based on the contents of the string.
 
@@ -69,8 +78,27 @@ function FindBook({ value, bookTitles, handleSelect, categories, bookData }) {
     if (value.length > 2) {
         return (
             bookArr.map(book => {
-                // category logic goes here, I guess
-                return <Suggestions onClick={(ev) => { handleSelect(ev.target.innerText) }}>{book[0]} - {book[1]}</Suggestions>
+                console.log(value);
+                // bolding logic goes here, I guess
+
+                // ok. let's think this through calmly and rationally. everything's fine.
+                // we need to get the full title, which we have, but find the index
+                // of the value in there. everything else needs to be bolded.
+                // I said everything's fine! will you calm down!
+
+                let textEndingIdx = book[0].toLowerCase().indexOf(value);
+                let textEndingStr = book[0].slice(textEndingIdx);
+                let textStartStr;
+
+                if (book[0].slice(0, textEndingIdx - 1) === "") {
+                    textStartStr = "";
+                } else {
+                    textStartStr = " " + book[0].slice(0, textEndingIdx);
+                }
+
+                console.log(textEndingStr);
+
+                return <Suggestions onClick={(ev) => { handleSelect(ev.target.innerText) }}>{textStartStr}<Prediction>{textEndingStr}</Prediction> in <BookSpan>{book[1]}</BookSpan></Suggestions>
             })
         )
     } else {
