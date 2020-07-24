@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-function Typeahead() {
+function Typeahead({ suggestions, handleSelect }) {
+  const [value, Setvalue] = useState("");
   return (
     <div
       style={{
@@ -13,8 +14,21 @@ function Typeahead() {
       }}
     >
       <div style={{ display: "flex" }}>
-        <Input type="text" />
-        <Button>Clear</Button>
+        <Input
+          type="text"
+          onKeyDown={(ev) => {
+            Setvalue(ev.target.value);
+            console.log(value);
+          }}
+        />
+        <Button
+          onClick={() => {
+            Setvalue("");
+            console.log(value);
+          }}
+        >
+          Clear
+        </Button>
       </div>
     </div>
   );
@@ -24,6 +38,7 @@ const Input = styled.input`
   border: 2px solid #eaeaea;
   width: 300px;
   border-radius: 5px;
+  padding-left: 10px;
 `;
 
 const Button = styled.button`
