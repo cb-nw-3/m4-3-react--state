@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import BookList from "./BookList";
+import RenderList from "./RenderList";
 function Typeahead(props) {
   const [value, setValue] = React.useState("");
   const { suggestions, handleSelect } = props;
   let refinedSuggestions = [];
+  let returnedSuggestions = false;
   if (value.length > 1) {
     refinedSuggestions = suggestions.filter((Element) => {
       return Element.title.toLowerCase().includes(value.toLowerCase());
     });
+    returnedSuggestions = refinedSuggestions.length > 1 ? true : false;
   }
 
   return (
@@ -32,13 +34,17 @@ function Typeahead(props) {
       >
         Clear
       </ClearBtn>
-      <BookList
+      <RenderList
+        returnedSuggestions={returnedSuggestions}
         refinedSuggestions={refinedSuggestions}
         handleSelect={handleSelect}
       />
     </InputData>
   );
 }
+const BookList = styled.ul`
+  border: 1px solid black;
+`;
 
 const InputData = styled.div`
   height: 30px;
