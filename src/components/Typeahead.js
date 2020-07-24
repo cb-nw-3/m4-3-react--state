@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-function Typeahead({ suggestions, handleSelect }) {
+function Typeahead({ suggestion, handleSelect }) {
   const [value, Setvalue] = useState("");
   return (
     <div
@@ -13,26 +13,44 @@ function Typeahead({ suggestions, handleSelect }) {
         alignItems: "center",
       }}
     >
-      <div style={{ display: "flex" }}>
-        <Input
-          type="text"
-          onKeyDown={(ev) => {
-            Setvalue(ev.target.value);
-            console.log(value);
-          }}
-        />
-        <Button
-          onClick={() => {
-            Setvalue("");
-            console.log(value);
-          }}
-        >
-          Clear
-        </Button>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex" }}>
+          <Input
+            type="text"
+            onChange={(ev) => {
+              Setvalue(ev.target.value);
+            }}
+          />
+          <Button
+            onClick={() => {
+              Setvalue("");
+            }}
+          >
+            Clear
+          </Button>
+        </div>
+        <BookDisplay suggestion={suggestion} value={value} />
       </div>
     </div>
   );
 }
+
+const BookDisplay = ({ suggestion, value }) => {
+  console.log(value);
+  if (value.length !== 0) {
+    return (
+      <ul>
+        {suggestion.map((book) => {
+          if (book.id.includes(value)) {
+            return <li>{book.id}</li>;
+          }
+        })}
+      </ul>
+    );
+  } else {
+    return <div></div>;
+  }
+};
 
 const Input = styled.input`
   border: 2px solid #eaeaea;
