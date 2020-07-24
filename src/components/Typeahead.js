@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Suggestion from "./Suggestion";
 import BookListing from "./BookListing";
 
+let suggestion_array = [];
+let selectedSuggestionIndex = 0;
 function Typeahead({ suggestions }) {
   //console.log("Typeahead");
   /// console.log(suggestions);
@@ -11,11 +13,11 @@ function Typeahead({ suggestions }) {
   const [booklist, setBooks] = React.useState("Books:");
 
   const [textfieldValue, setTextField] = React.useState("");
-  let suggestion_array = [];
-
-  let testdave = true;
 
   function findBook(event) {
+    suggestion_array = [];
+    console.log(event.target.value);
+
     let bookSearchText = event.target.value.toLowerCase();
     let books_suggested = suggestions.books.filter((e) =>
       e.title.toLowerCase().includes(bookSearchText)
@@ -27,14 +29,65 @@ function Typeahead({ suggestions }) {
     });
     setTextField(event.target.value);
 
-    books_suggested.forEach((bookFromList) => {
-      suggestion_array.push(
-        <Suggestion Book={bookFromList} SearchTerm={event.target.value} />
-      );
+    books_suggested.forEach((bookFromList, i) => {
+      // console.log("books i");
+
+      // console.log(i);
+      // console.log(selectedSuggestionIndex);
+
+      if (i === selectedSuggestionIndex) {
+        suggestion_array.push(
+          <Suggestion
+            Book={bookFromList}
+            SearchTerm={event.target.value}
+            isSelected={true}
+          />
+        );
+      } else {
+        suggestion_array.push(
+          <Suggestion
+            Book={bookFromList}
+            SearchTerm={event.target.value}
+            isSelected={false}
+          />
+        );
+      }
     });
-    console.log(booklist.length);
+    // console.log(booklist.length);
+    if (selectedSuggestionIndex > suggestion_array.length - 1) {
+      selectedSuggestionIndex = suggestion_array.length - 1;
+    }
 
     setBooks(suggestion_array);
+  }
+
+  function handleKeyPress(event) {
+    switch (event.key) {
+      case "Enter": {
+        // handleSelect(ev.target.value);
+        return;
+      }
+      case "ArrowUp": {
+        selectedSuggestionIndex = selectedSuggestionIndex - 1;
+        if (selectedSuggestionIndex < 0) {
+          selectedSuggestionIndex = 0;
+        }
+        console.log("Arrow up");
+        console.log(selectedSuggestionIndex);
+        // TODO: Handle moving the selection up
+        findBook(event);
+        return;
+      }
+      case "ArrowDown": {
+        console.log("Arrow down");
+
+        selectedSuggestionIndex = selectedSuggestionIndex + 1;
+        console.log(selectedSuggestionIndex);
+        findBook(event);
+        return;
+        // TODO: Handle moving the selection down
+      }
+    }
   }
 
   function clear(event) {
@@ -49,6 +102,7 @@ function Typeahead({ suggestions }) {
           type="text"
           value={textfieldValue}
           onChange={findBook}
+          onKeyDown={handleKeyPress}
         ></TypeHeadInput>
         <Button onClick={clear}>Clear</Button>
       </TypeAheadDiv>
