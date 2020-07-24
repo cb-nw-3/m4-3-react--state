@@ -9,6 +9,7 @@ const Typeahead = ({suggestions, categories, handleSelect}) => {
     const [value, setValue] = React.useState('');
     let matchedSuggestions = suggestions.filter(suggestion => suggestion.title.toLowerCase().includes(value.toLowerCase()));
     const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
+    
 
     return (
     <>
