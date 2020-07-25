@@ -6,6 +6,7 @@ import BookListing from "./BookListing";
 
 let suggestion_array = [];
 let selectedSuggestionIndex = 0;
+let book_rendered_count = 0;
 function Typeahead({ suggestions }) {
   //console.log("Typeahead");
   /// console.log(suggestions);
@@ -29,8 +30,13 @@ function Typeahead({ suggestions }) {
     });
     setTextField(event.target.value);
 
+    book_rendered_count = books_suggested.length;
     books_suggested.forEach((bookFromList, i) => {
       // console.log("books i");
+
+      let category_name = Object.values(suggestions.categories).find(
+        (element) => element.id === bookFromList.categoryId
+      ).name;
 
       // console.log(i);
       // console.log(selectedSuggestionIndex);
@@ -41,6 +47,7 @@ function Typeahead({ suggestions }) {
             Book={bookFromList}
             SearchTerm={event.target.value}
             isSelected={true}
+            categoryName={category_name}
           />
         );
       } else {
@@ -49,6 +56,7 @@ function Typeahead({ suggestions }) {
             Book={bookFromList}
             SearchTerm={event.target.value}
             isSelected={false}
+            categoryName={category_name}
           />
         );
       }
@@ -82,6 +90,9 @@ function Typeahead({ suggestions }) {
         console.log("Arrow down");
 
         selectedSuggestionIndex = selectedSuggestionIndex + 1;
+        if (selectedSuggestionIndex > book_rendered_count - 1) {
+          selectedSuggestionIndex = book_rendered_count - 1;
+        }
         console.log(selectedSuggestionIndex);
         findBook(event);
         return;
