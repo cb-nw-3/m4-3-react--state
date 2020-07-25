@@ -14,6 +14,7 @@ const App = (props) => {
       <Wrapper>
         <Typeahead
           suggestions={data.books}
+          categories={data.books}
           handleSelect={(suggestion) => {
             window.alert(suggestion);
           }}
