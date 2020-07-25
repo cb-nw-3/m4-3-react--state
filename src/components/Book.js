@@ -2,7 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { categories } from "../data";
 function Book(props) {
-  const { book, handleSelect, value } = props;
+  const {
+    book,
+    handleSelect,
+    value,
+    selectedSuggestionIndex,
+    listItemID,
+  } = props;
+  const isSelected = selectedSuggestionIndex;
   let bookSelected = book.title.toLowerCase();
   let firstHalfPosition = bookSelected.indexOf(value.toLowerCase());
   let firstHalf = book.title.slice(0, firstHalfPosition + value.length);
@@ -12,12 +19,19 @@ function Book(props) {
     results.push(categories[i]);
   }
   let category = results.filter((element) => {
-    return element.id == book.categoryId;
+    return element.id === book.categoryId;
   });
   return (
     <BookOption
+      key={listItemID}
       onClick={() => {
         handleSelect(book.title);
+      }}
+      style={{
+        background:
+          listItemID == isSelected
+            ? "hsla(50deg, 100%, 80%, 0.25)"
+            : "transparent",
       }}
     >
       {firstHalf}
@@ -38,10 +52,6 @@ const Category = styled.i`
 const BookOption = styled.li`
   line-height: 1.75em;
   list-style-type: none;
-
-  &: hover {
-    background-color: yellow;
-  }
 `;
 
 export default Book;

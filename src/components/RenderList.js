@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import BookList from "./BookList";
 
 function RenderList(props) {
@@ -8,6 +7,7 @@ function RenderList(props) {
     refinedSuggestions,
     handleSelect,
     value,
+    selectedSuggestionIndex,
   } = props;
   if (returnedSuggestions) {
     return (
@@ -15,6 +15,7 @@ function RenderList(props) {
         refinedSuggestions={refinedSuggestions}
         handleSelect={handleSelect}
         value={value}
+        selectedSuggestionIndex={selectedSuggestionIndex}
       />
     );
   } else {

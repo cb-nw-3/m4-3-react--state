@@ -3,6 +3,9 @@ import styled from "styled-components";
 import RenderList from "./RenderList";
 function Typeahead(props) {
   const [value, setValue] = React.useState("");
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
   const { suggestions, handleSelect } = props;
   let refinedSuggestions = [];
   let returnedSuggestions = false;
@@ -22,8 +25,25 @@ function Typeahead(props) {
           setValue(ev.target.value);
         }}
         onKeyDown={(ev) => {
-          if (ev.key == "Enter") {
-            handleSelect(ev.target.value);
+          switch (ev.key) {
+            case "Enter": {
+              handleSelect(ev.target.value);
+              return;
+            }
+            case "ArrowUp": {
+              if (selectedSuggestionIndex !== 0) {
+                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                return;
+              }
+              break;
+            }
+            case "ArrowDown": {
+              if (selectedSuggestionIndex !== refinedSuggestions.length - 1) {
+                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                return;
+              }
+              break;
+            }
           }
         }}
       />
@@ -39,13 +59,11 @@ function Typeahead(props) {
         refinedSuggestions={refinedSuggestions}
         handleSelect={handleSelect}
         value={value}
+        selectedSuggestionIndex={selectedSuggestionIndex}
       />
     </InputData>
   );
 }
-const BookList = styled.ul`
-  border: 1px solid black;
-`;
 
 const InputData = styled.div`
   height: 30px;
