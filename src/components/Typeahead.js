@@ -35,16 +35,16 @@ const BookList = styled.ul`
 `
 
 const Suggestions = styled.li`
-    margin-bottom: 10px;
-    padding: 10px;
+//     margin-bottom: 10px;
+//     padding: 10px;
 
-    &:hover {
-        background: lightyellow;
-    }
+//     &:hover {
+//         background: lightyellow;
+//     }
 
-    &:last-child {
-        margin-bottom: 0;
-    }
+//     &:last-child {
+//         margin-bottom: 0;
+//     }
 `
 
 let Prediction = styled.span`
@@ -62,7 +62,7 @@ let BookSpan = styled.span`
 // We also have the books array, in the form of the suggestions variable, but we
 // want to search through only the list of book titles.
 
-function FindBook({ value, bookTitles, handleSelect, categories, bookData }) {
+function FindBook({ value, bookTitles, handleSelect, categories, bookData, suggestNum, setSuggestNum }) {
     let bookTitleArr = bookTitles.filter(title => title.toLowerCase().includes(value.toLowerCase()));
 
     // I want bookArr to actually contain an array of books and types
@@ -75,35 +75,57 @@ function FindBook({ value, bookTitles, handleSelect, categories, bookData }) {
         bookArr.push([title, categories[bookIdx.categoryId]["name"]]);
     })
 
-    if (value.length > 2) {
-        return (
-            bookArr.map(book => {
-                console.log(value);
-                // bolding logic goes here, I guess
+    return value.length > 2 && (
+        bookArr.map((book, index) => {
+            // bolding logic goes here, I guess
 
-                // ok. let's think this through calmly and rationally. everything's fine.
-                // we need to get the full title, which we have, but find the index
-                // of the value in there. everything else needs to be bolded.
-                // I said everything's fine! will you calm down!
+            // ok. let's think this through calmly and rationally. everything's fine.
+            // we need to get the full title, which we have, but find the index
+            // of the value in there. everything else needs to be bolded.
+            // I said everything's fine! will you calm down!
 
-                let textEndingIdx = book[0].toLowerCase().indexOf(value);
-                let textEndingStr = book[0].slice(textEndingIdx);
-                let textStartStr;
+            let textEndingIdx = book[0].toLowerCase().indexOf(value);
+            let textEndingStr = book[0].slice(textEndingIdx);
+            let textStartStr;
 
-                if (book[0].slice(0, textEndingIdx - 1) === "") {
-                    textStartStr = "";
-                } else {
-                    textStartStr = " " + book[0].slice(0, textEndingIdx);
+            if (book[0].slice(0, textEndingIdx - 1) === "") {
+                textStartStr = "";
+            } else {
+                textStartStr = " " + book[0].slice(0, textEndingIdx);
+            }
+
+            // I guess we'd have to treat the list of current <li>s as an array with an index.
+            // Since we're watching for up/down arrow, we don't have to care too much about
+            // the text changing.
+
+            // The problem is, how do I automatically increment the key? I need to be able
+            // to move the colouring up and down, but I don't know how to do that, really.
+            // Am I over thinking it?
+
+            // need to compare suggestNum to the index of the item
+
+            let isSelected = suggestNum === index;
+
+            return <Suggestions
+                key={index}
+                style={{
+                    background: isSelected ? 'hsla(50deg, 100%, 80%, 0.25)' : 'transparent',
+                }}
+                onClick={
+                    (ev) => {
+                        // handleSelect(ev.target.innerText);
+                        handleSelect(book[0])
+                    }
                 }
-
-                console.log(textEndingStr);
-
-                return <Suggestions onClick={(ev) => { handleSelect(ev.target.innerText) }}>{textStartStr}<Prediction>{textEndingStr}</Prediction> in <BookSpan>{book[1]}</BookSpan></Suggestions>
-            })
-        )
-    } else {
-        return null;
-    }
+                onMouseEnter={
+                    () => {
+                        // this kinda works now by inheriting setSuggestNum
+                        setSuggestNum(index)
+                    }
+                }
+            > {textStartStr} < Prediction > {textEndingStr}</Prediction > in <BookSpan>{book[1]}</BookSpan></Suggestions >
+        })
+    )
 }
 
 
@@ -112,6 +134,7 @@ function Typeahead({ suggestions, handleSelect, categories }) {
     // Pretty sure that setValue is just an arbitrary name set by convention
     // to match with the first one
 
+    const [suggestNum, setSuggestNum] = React.useState(0);
     const [value, setValue] = React.useState('');
 
     let bookTitles = [];
@@ -138,7 +161,6 @@ function Typeahead({ suggestions, handleSelect, categories }) {
     // If I read the hints, it seems like I should re-implement the suggestions
     // logic. I really don't like that, but fine. whatever.
 
-
     let bookArr = bookTitles.filter(title => title.toLowerCase().includes(value.toLowerCase()));
 
     let suggestionExist;
@@ -156,22 +178,48 @@ function Typeahead({ suggestions, handleSelect, categories }) {
                 <InputField
                     type="text"
                     onKeyDown={(ev) => {
-                        if (ev.key === 'Enter') {
-                            handleSelect(ev.target.value)
-                        } else {
-                            let stringHolder = ev.target.value + ev.key;
-                            if (stringHolder.length > 2) {
-                                setValue(stringHolder);
+                        switch (ev.key) {
+                            case "Enter":
+                                // this needs to somehow grab the selection
+                                // and not the ev related data.
+                                // How can I grab the correct Suggestion based on the index?
+                                handleSelect(bookArr[suggestNum]);
+                                return;
+                            case "ArrowUp": {
+                                // TODO: Handle moving the selection up
+                                setSuggestNum(suggestNum - 1);
+                                return;
                             }
+                            case "ArrowDown": {
+                                // TODO: Handle moving the selection down
+                                setSuggestNum(suggestNum + 1);
+                                return;
+                            }
+
+                            default:
+                                let stringHolder = ev.target.value + ev.key;
+                                if (stringHolder.length > 2) {
+                                    setValue(stringHolder);
+                                }
                         }
-                    }} />
+                    }
+                    }
+                />
                 <InputButton onClick={() => setValue('')}>Clear</InputButton>
 
             </Input>
 
             {suggestionExist &&
                 <BookList>
-                    <FindBook value={value} bookTitles={bookTitles} handleSelect={handleSelect} categories={categories} bookData={suggestions} />
+                    <FindBook
+                        value={value}
+                        bookTitles={bookTitles}
+                        handleSelect={handleSelect}
+                        categories={categories}
+                        bookData={suggestions}
+                        suggestNum={suggestNum}
+                        setSuggestNum={setSuggestNum}
+                    />
                 </BookList>
             }
         </Wrapper>
