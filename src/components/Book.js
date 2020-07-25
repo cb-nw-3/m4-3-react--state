@@ -4,7 +4,7 @@ import { categories } from "../data";
 function Book(props) {
   const { book, handleSelect, value } = props;
   let bookSelected = book.title.toLowerCase();
-  let firstHalfPosition = bookSelected.indexOf(value);
+  let firstHalfPosition = bookSelected.indexOf(value.toLowerCase());
   let firstHalf = book.title.slice(0, firstHalfPosition + value.length);
   let secondHalf = book.title.slice(firstHalfPosition + value.length);
   let results = [];
@@ -22,7 +22,7 @@ function Book(props) {
     >
       {firstHalf}
       <Prediction>{secondHalf}</Prediction>
-      <Category>in {category[0].name}</Category>
+      <Category> in {category[0].name}</Category>
     </BookOption>
   );
 }
