@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Typeahead= ({suggestions, handleSelect}) => {
   const [value, setValue] = React.useState('');
-  const matchedSuggestions = suggestions.filter(suggestion =>suggestion.title.toLowerCase().includes(value.toLowerCase())
+  let matchedSuggestions = suggestions.filter(suggestion =>suggestion.title.toLowerCase().includes(value.toLowerCase())
   );
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(0);
   
@@ -15,19 +15,26 @@ const Typeahead= ({suggestions, handleSelect}) => {
         value={value}
         onChange={(ev) => setValue(ev.target.value)}
         onKeyDown={(ev) => {
+          if (matchedSuggestions) {
             switch (ev.key) {
               case 'Enter': {
-                handleSelect(ev.target.value);
+                handleSelect(matchedSuggestions[selectedSuggestionIndex].title);
                 return;
               }
               case 'ArrowUp': {
+                ev.preventDefault();
                 setSelectedSuggestionIndex(selectedSuggestionIndex -1);
                 return;
               }
               case 'ArrowDown': {
+                ev.preventDefault();
                 setSelectedSuggestionIndex(selectedSuggestionIndex +1);
                 return;
               }
+            }
+            return;
+          } else {
+              selectedSuggestionIndex = 0;
             }
         }}
       />
@@ -42,8 +49,7 @@ const Typeahead= ({suggestions, handleSelect}) => {
                       background: isSelected ? 'blue' : 'transparent',
                   }}
                   onClick={() => handleSelect(suggestion.title)}
-                  onMouseEnter={() => {setSelectedSuggestionIndex(index);
-                  }}
+                  onMouseEnter={() => {setSelectedSuggestionIndex(index)}}
                 >
                   <span>
                     {suggestion.title.slice(0 ,suggestion.title.toLowerCase().indexOf(value)+ value.length)}
