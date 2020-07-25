@@ -8,6 +8,8 @@ function RenderList(props) {
     handleSelect,
     value,
     selectedSuggestionIndex,
+    setValue,
+    setSelectedSuggestionIndex,
   } = props;
   if (returnedSuggestions) {
     return (
@@ -16,6 +18,8 @@ function RenderList(props) {
         handleSelect={handleSelect}
         value={value}
         selectedSuggestionIndex={selectedSuggestionIndex}
+        setValue={setValue}
+        setSelectedSuggestionIndex={setSelectedSuggestionIndex}
       />
     );
   } else {

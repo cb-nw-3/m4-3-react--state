@@ -7,6 +7,8 @@ function BookList(props) {
     handleSelect,
     value,
     selectedSuggestionIndex,
+    setValue,
+    setSelectedSuggestionIndex,
   } = props;
   return refinedSuggestions.map((element) => {
     return (
@@ -16,6 +18,8 @@ function BookList(props) {
         book={element}
         value={value}
         selectedSuggestionIndex={selectedSuggestionIndex}
+        setValue={setValue}
+        setSelectedSuggestionIndex={setSelectedSuggestionIndex}
       />
     );
   });

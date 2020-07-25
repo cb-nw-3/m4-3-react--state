@@ -8,6 +8,8 @@ function Book(props) {
     value,
     selectedSuggestionIndex,
     listItemID,
+    setValue,
+    setSelectedSuggestionIndex,
   } = props;
   const isSelected = selectedSuggestionIndex;
   let bookSelected = book.title.toLowerCase();
@@ -24,8 +26,8 @@ function Book(props) {
   return (
     <BookOption
       key={listItemID}
-      onClick={() => {
-        handleSelect(book.title);
+      onMouseEnter={() => {
+        setSelectedSuggestionIndex(listItemID);
       }}
       style={{
         background:
@@ -52,6 +54,7 @@ const Category = styled.i`
 const BookOption = styled.li`
   line-height: 1.75em;
   list-style-type: none;
+  &
 `;
 
 export default Book;
