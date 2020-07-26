@@ -42,9 +42,6 @@ const ListItem = styled.li`
   margin: 10px;
   max-width: 350px;
   cursor: pointer;
-  &:hover {
-    background-color: #fff9cf;
-  }
 `;
 
 const Prediction = styled.span`
@@ -60,6 +57,10 @@ const Category = styled.span`
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [value, setValue] = React.useState("");
   const [showSuggestions, setShowSuggestions] = React.useState(false);
+  const [filtered, setFiltered] = React.useState([]);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
 
   return (
     <Container>
@@ -70,13 +71,51 @@ const Typeahead = ({ suggestions, handleSelect }) => {
             setValue(ev.target.value);
             if (value.length > 1) {
               setShowSuggestions(true);
+              const temp = suggestions.filter((x) =>
+                x.title.toLowerCase().includes(value.toLowerCase())
+              );
+              setFiltered(temp);
             } else {
               setShowSuggestions(false);
+              setFiltered([]);
             }
           }}
           onKeyDown={(ev) => {
-            if (ev.key === "Enter") {
-              handleSelect(ev.key);
+            switch (ev.key) {
+              case "Enter": {
+                if (filtered.length > 0) {
+                  const book = filtered[selectedSuggestionIndex];
+                  handleSelect(book.title);
+                }
+                return;
+              }
+              case "ArrowUp": {
+                if (filtered.length > 0) {
+                  const index =
+                    selectedSuggestionIndex === 0
+                      ? 0
+                      : selectedSuggestionIndex - 1;
+                  setSelectedSuggestionIndex(index);
+                }
+                return;
+              }
+              case "ArrowDown": {
+                if (filtered.length > 0) {
+                  const index =
+                    selectedSuggestionIndex === filtered.length - 1
+                      ? filtered.length - 1
+                      : selectedSuggestionIndex + 1;
+                  setSelectedSuggestionIndex(index);
+                }
+                return;
+              }
+              case "Escape": {
+                setShowSuggestions(false);
+                setFiltered([]);
+                const input = document.querySelector("input");
+                input.value = "";
+                setValue("");
+              }
             }
           }}
           value={value}
@@ -94,32 +133,34 @@ const Typeahead = ({ suggestions, handleSelect }) => {
         </Clear>
         {showSuggestions && (
           <Suggestions>
-            {suggestions.map((book) => {
-              const match = book.title
+            {filtered.map((book) => {
+              const isSelected =
+                filtered[selectedSuggestionIndex].id === book.id;
+              const index = book.title
                 .toLowerCase()
-                .includes(value.toLowerCase());
-              if (match) {
-                const index = book.title
-                  .toLowerCase()
-                  .indexOf(value.toLowerCase());
-                return (
-                  <ListItem
-                    key={book.id}
-                    onClick={(ev) => {
-                      handleSelect(book.id);
-                    }}
-                  >
-                    {book.title.substring(0, index + value.length)}
-                    <Prediction>
-                      {book.title.substring(
-                        index + value.length,
-                        book.title.length
-                      )}
-                    </Prediction>
-                    <Category>{book.categoryId}</Category>
-                  </ListItem>
-                );
-              }
+                .indexOf(value.toLowerCase());
+              return (
+                <ListItem
+                  key={book.id}
+                  style={{
+                    background: isSelected
+                      ? "hsla(50deg, 100%, 80%, 0.25)"
+                      : "transparent",
+                  }}
+                  onClick={(ev) => {
+                    handleSelect(book.id);
+                  }}
+                >
+                  {book.title.substring(0, index + value.length)}
+                  <Prediction>
+                    {book.title.substring(
+                      index + value.length,
+                      book.title.length
+                    )}
+                  </Prediction>
+                  <Category>{book.categoryId}</Category>
+                </ListItem>
+              );
             })}
           </Suggestions>
         )}
