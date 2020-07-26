@@ -50,7 +50,7 @@ const BookDisplay = ({ suggestion, value, handleSelect }) => {
         {suggestionArray.map((book) => {
           return (
             <Suggestion key={book.id} onClick={() => handleSelect(book.id)}>
-              {book.id}{" "}
+              <Prediction bookTitle={book.id} value={value}></Prediction>
               <span
                 style={{
                   fontSize: "0.7em",
@@ -67,6 +67,35 @@ const BookDisplay = ({ suggestion, value, handleSelect }) => {
     );
   } else {
     return <div></div>;
+  }
+};
+
+const Prediction = ({ bookTitle, value }) => {
+  let index = bookTitle.indexOf(`${value}`);
+  if (index === 0) {
+    return (
+      <>
+        <span>{bookTitle.split("").splice(0, value.length).join("")}</span>
+        <span style={{ fontWeight: "bold" }}>
+          {bookTitle.split("").splice(value.length).join("")}
+        </span>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <span>{bookTitle.split("").splice(0, index).join("")}</span>
+        <span style={{ fontWeight: "bold" }}>
+          {bookTitle.split("").splice(index, value.length).join("")}
+        </span>
+        <span>
+          {bookTitle
+            .split("")
+            .splice(`${index + value.length}`)
+            .join("")}
+        </span>
+      </>
+    );
   }
 };
 
