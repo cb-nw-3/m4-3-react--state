@@ -47,6 +47,16 @@ const ListItem = styled.li`
   }
 `;
 
+const Prediction = styled.span`
+  font-weight: bold;
+`;
+
+const Category = styled.span`
+  display: block;
+  font-style: italic;
+  color: #f003fc;
+`;
+
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [value, setValue] = React.useState("");
   const [showSuggestions, setShowSuggestions] = React.useState(false);
@@ -89,6 +99,9 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                 .toLowerCase()
                 .includes(value.toLowerCase());
               if (match) {
+                const index = book.title
+                  .toLowerCase()
+                  .indexOf(value.toLowerCase());
                 return (
                   <ListItem
                     key={book.id}
@@ -96,7 +109,14 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                       handleSelect(book.id);
                     }}
                   >
-                    {book.title}
+                    {book.title.substring(0, index + value.length)}
+                    <Prediction>
+                      {book.title.substring(
+                        index + value.length,
+                        book.title.length
+                      )}
+                    </Prediction>
+                    <Category>{book.categoryId}</Category>
                   </ListItem>
                 );
               }
