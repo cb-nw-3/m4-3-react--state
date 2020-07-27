@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 const Typehead = ({ suggestions, handleSelect }) => {
   const [searchTerm, setSearchTerm] = React.useState("");
+  let searchTermLowerCase = searchTerm.toLowerCase();
   const matchingSuggestions = suggestions.filter((suggestion) => {
-    let searchTermLowerCase = searchTerm.toLowerCase();
     let suggestedTitleLowerCase = suggestion.title.toLowerCase();
     if (searchTerm.length >= 2) {
       return suggestedTitleLowerCase.includes(searchTermLowerCase);
@@ -29,12 +29,22 @@ const Typehead = ({ suggestions, handleSelect }) => {
       {matchingSuggestions.length > 0 && (
         <StyledSuggestionList>
           {matchingSuggestions.map((suggestion) => {
+            let suggestionLowerCase = suggestion.title.toLowerCase();
+            let indexOfSearchTerm =
+              suggestionLowerCase.indexOf(searchTermLowerCase) +
+              searchTermLowerCase.length;
+            let stringStart = suggestion.title.slice(0, indexOfSearchTerm);
+            let stringEnd = suggestion.title.slice(indexOfSearchTerm);
+
             return (
               <StyledSuggestion
                 key={suggestion.id}
                 onClick={() => handleSelect(suggestion.title)}
               >
-                {suggestion.title}
+                <span>
+                  {stringStart}
+                  <Prediction>{stringEnd}</Prediction>
+                </span>
               </StyledSuggestion>
             );
           })}
@@ -75,6 +85,10 @@ const StyledSuggestion = styled.li`
   &:hover {
     background: lightyellow;
   }
+`;
+
+const Prediction = styled.span`
+  font-weight: bold;
 `;
 
 export default Typehead;
