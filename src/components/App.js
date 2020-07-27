@@ -20,7 +20,7 @@ const App = (props) => {
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
   height: 100%;

@@ -26,18 +26,20 @@ const Typehead = ({ suggestions, handleSelect }) => {
           }
         }}
       />
-      <StyledSuggestionList>
-        {matchingSuggestions.map((suggestion) => {
-          return (
-            <StyledSuggestion
-              key={suggestion.id}
-              onClick={() => handleSelect(suggestion.title)}
-            >
-              {suggestion.title}
-            </StyledSuggestion>
-          );
-        })}
-      </StyledSuggestionList>
+      {matchingSuggestions.length > 0 && (
+        <StyledSuggestionList>
+          {matchingSuggestions.map((suggestion) => {
+            return (
+              <StyledSuggestion
+                key={suggestion.id}
+                onClick={() => handleSelect(suggestion.title)}
+              >
+                {suggestion.title}
+              </StyledSuggestion>
+            );
+          })}
+        </StyledSuggestionList>
+      )}
       <StyledButton onClick={() => setSearchTerm("")}>Clear</StyledButton>
     </>
   );
