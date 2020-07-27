@@ -10,6 +10,7 @@ const App = (props) => {
       <GlobalStyles />
       <Typehead
         suggestions={data.books}
+        categories={data.categories}
         handleSelect={(suggestion) => {
           window.alert(suggestion);
         }}

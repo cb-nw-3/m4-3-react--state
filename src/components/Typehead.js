@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Typehead = ({ suggestions, handleSelect }) => {
+const Typehead = ({ suggestions, handleSelect, categories }) => {
   const [searchTerm, setSearchTerm] = React.useState("");
   let searchTermLowerCase = searchTerm.toLowerCase();
   const matchingSuggestions = suggestions.filter((suggestion) => {
@@ -35,6 +35,7 @@ const Typehead = ({ suggestions, handleSelect }) => {
               searchTermLowerCase.length;
             let stringStart = suggestion.title.slice(0, indexOfSearchTerm);
             let stringEnd = suggestion.title.slice(indexOfSearchTerm);
+            const category = categories[suggestion.categoryId].name;
 
             return (
               <StyledSuggestion
@@ -44,6 +45,7 @@ const Typehead = ({ suggestions, handleSelect }) => {
                 <span>
                   {stringStart}
                   <Prediction>{stringEnd}</Prediction>
+                  <Category> in {category}</Category>
                 </span>
               </StyledSuggestion>
             );
@@ -89,6 +91,12 @@ const StyledSuggestion = styled.li`
 
 const Prediction = styled.span`
   font-weight: bold;
+`;
+
+const Category = styled.span`
+  font-style: italic;
+  font-size: 12px;
+  color: purple;
 `;
 
 export default Typehead;
