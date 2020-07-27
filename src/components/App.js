@@ -19,8 +19,9 @@ const App = (props) => {
 };
 
 const Wrapper = styled.div`
-  position: absolute;
   display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   width: 100%;
   height: 100%;
   justify-content: center;
