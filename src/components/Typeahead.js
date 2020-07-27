@@ -5,9 +5,13 @@ import styled from "styled-components";
 const Typeahead = ({ suggestions, handleSelect }) => {
   // console.log(data)
   const [value, setValue] = React.useState("");
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
   const matchedSuggestions = suggestions.filter((suggestion) => {
     return suggestion.title.includes(value);
   });
+  const selectedSuggestion = matchedSuggestions[selectedSuggestionIndex];
 
   return (
     <>
@@ -23,14 +27,17 @@ const Typeahead = ({ suggestions, handleSelect }) => {
               // }
               switch (ev.key) {
                 case "Enter": {
-                  handleSelect(ev.target.value);
-                  return;
+                  console.log(selectedSuggestion);
+                  handleSelect(selectedSuggestion.title);
+                  break;
                 }
                 case "ArrowUp": {
-                  handleSelect(ev.key.up)
+                  setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                  break;
                 }
                 case "ArrowDown": {
-                  handleSelect(ev.key.down)
+                  setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                  break;
                 }
               }
             }}
@@ -40,16 +47,22 @@ const Typeahead = ({ suggestions, handleSelect }) => {
         <Div2>
           {value.length >= 2 && (
             <Ul>
-              {matchedSuggestions.map((suggestion) => {
+              {matchedSuggestions.map((suggestion, index) => {
                 const matchedIndex =
                   suggestion.title.indexOf(value) + value.length;
                 const firstHalf = suggestion.title.slice(0, matchedIndex);
                 const secondHalf = suggestion.title.slice(matchedIndex);
                 const categoryId = suggestion.categoryId;
+                const isSelected = selectedSuggestionIndex === index + 1;
                 return (
                   <Wrap>
                     <Suggestion
                       key={suggestion.id}
+                      style={{
+                        background: isSelected
+                          ? "hsla(50deg, 100%, 80%, 0.25)"
+                          : "transparent",
+                      }}
                       onClick={() => handleSelect(suggestion.title)}
                     >
                       {firstHalf}
