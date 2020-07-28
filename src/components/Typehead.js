@@ -3,6 +3,10 @@ import styled from "styled-components";
 
 const Typehead = ({ suggestions, handleSelect, categories }) => {
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    0
+  );
+
   let searchTermLowerCase = searchTerm.toLowerCase();
   const matchingSuggestions = suggestions.filter((suggestion) => {
     let suggestedTitleLowerCase = suggestion.title.toLowerCase();
@@ -11,6 +15,9 @@ const Typehead = ({ suggestions, handleSelect, categories }) => {
     }
     return;
   });
+
+  const selectedSuggestion = matchingSuggestions[selectedSuggestionIndex];
+
   return (
     <>
       <StyledInput
@@ -20,15 +27,25 @@ const Typehead = ({ suggestions, handleSelect, categories }) => {
           setSearchTerm(event.target.value);
         }}
         onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            console.log(event.target.value);
-            handleSelect(event.target.value);
+          switch (event.key) {
+            case "Enter": {
+              handleSelect(selectedSuggestion.title);
+              return;
+            }
+            case "ArrowUp": {
+              setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+              return;
+            }
+            case "ArrowDown": {
+              setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+              return;
+            }
           }
         }}
       />
       {matchingSuggestions.length > 0 && (
         <StyledSuggestionList>
-          {matchingSuggestions.map((suggestion) => {
+          {matchingSuggestions.map((suggestion, index) => {
             let suggestionLowerCase = suggestion.title.toLowerCase();
             let indexOfSearchTerm =
               suggestionLowerCase.indexOf(searchTermLowerCase) +
@@ -36,11 +53,14 @@ const Typehead = ({ suggestions, handleSelect, categories }) => {
             let stringStart = suggestion.title.slice(0, indexOfSearchTerm);
             let stringEnd = suggestion.title.slice(indexOfSearchTerm);
             const category = categories[suggestion.categoryId].name;
+            const isHighlighted = index === selectedSuggestionIndex;
 
             return (
               <StyledSuggestion
                 key={suggestion.id}
                 onClick={() => handleSelect(suggestion.title)}
+                onMouseEnter={() => setSelectedSuggestionIndex(index)}
+                style={{ background: isHighlighted && "lightyellow" }}
               >
                 <span>
                   {stringStart}
@@ -78,15 +98,15 @@ const StyledButton = styled.button`
 `;
 
 const StyledSuggestionList = styled.ul`
+  position: absolute;
   width: 300px;
+  top: 100%;
+  left: 40.5%;
   box-shadow: 0px 0px 20px 0px rgba(46, 74, 117, 0.5);
 `;
 
 const StyledSuggestion = styled.li`
   padding: 10px 5px;
-  &:hover {
-    background: lightyellow;
-  }
 `;
 
 const Prediction = styled.span`

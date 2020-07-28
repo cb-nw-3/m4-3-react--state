@@ -21,6 +21,7 @@ const App = (props) => {
 
 const Wrapper = styled.div`
   display: flex;
+  position: relative;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
