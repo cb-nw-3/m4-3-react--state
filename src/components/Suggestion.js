@@ -5,7 +5,8 @@ const Suggestion = styled.li`
     cursor: pointer;
     text-align: left;
     line-height: 20px;
-    padding: 6px;
+    padding: 10px;
+    list-style: none;
     &:hover {
         background-color: #fffacc;
     }

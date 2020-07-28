@@ -34,20 +34,35 @@ const Typeahead = ({ suggestions, handleSelect }) => {
         </ClearButton>
      </Row>
      <Suggestions>
-                    {value.length >= 2 &&
-                        matchedSuggestions.map((suggestion) => {
-                            return (
-                                <Suggestion
-                                    key={suggestion.id}
-                                    onClick={() =>
-                                        handleSelect(suggestion.title)
-                                    }
-                                >
-                                    {suggestion.title}
-                                </Suggestion>
+        {value.length >= 2 &&
+        matchedSuggestions.map((suggestion) => {
+        const matchIndex = suggestion.title
+            .toLowerCase()
+            .indexOf(value.toLowerCase());
+        const matchEnd = matchIndex + value.length;
+        const firstHalf = suggestion.title.slice(0,matchEnd);
+        const secondHalf = suggestion.title.slice(matchEnd);
+// 
+        return (
+                <Suggestion
+                    key={suggestion.id}
+                    onClick={() =>
+                    handleSelect(suggestion.title)
+                            }
+                            >
+                        <span>
+                            {firstHalf}
+                                <Prediction>{secondHalf}
+                                </Prediction>
+                                    <em> in </em>
+                                    <CategoryId>
+                                            {suggestion.categoryId}
+                                        </CategoryId>
+                                    </span>
+                        </Suggestion>
                            );
-                        })}
-                </Suggestions>
+                })}
+            </Suggestions>
      </Wrapper>
      )
 };
@@ -68,10 +83,10 @@ const Row = styled.div`
 const Input = styled.input`
   width: 350px;
   height: 40px;
-  padding: 0 12px;
+  padding: 0 15px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 18px;
+  border-radius: 5px;
+  font-size: 20px;
 `;
 
 const Suggestions = styled.div`
@@ -87,6 +102,15 @@ const Suggestions = styled.div`
   &:empty {
         display: none;
     }
+`;
+
+const Prediction = styled.span`
+  font-weight: bold;
+`;
+
+const CategoryId = styled.em`
+    color: purple;
+    font-size: 14px;
 `;
 
 export default Typeahead;
