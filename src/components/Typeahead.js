@@ -76,6 +76,7 @@ const Button = styled.button`
     color: white;
     font-size: 1em;
     cursor: pointer;
+    outline: none;
 `;
 
 const Suggestions = styled.ul`
@@ -85,6 +86,10 @@ const Suggestions = styled.ul`
     box-shadow: 3px 4px 11px 3px rgba(201, 197, 201, 1);
     max-height: 300px;
     overflow: scroll;
+
+    &:empty {
+        display: none;
+    }
 `;
 
 export default Typeahead;
