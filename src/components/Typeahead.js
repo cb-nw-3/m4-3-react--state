@@ -33,6 +33,16 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                 <Suggestions>
                     {value.length >= 2 &&
                         matchedSuggestions.map((suggestion) => {
+                            const matchIndex = suggestion.title
+                                .toLowerCase()
+                                .indexOf(value.toLowerCase());
+                            const matchEnd = matchIndex + value.length;
+                            const firstHalf = suggestion.title.slice(
+                                0,
+                                matchEnd
+                            );
+                            const secondHalf = suggestion.title.slice(matchEnd);
+
                             return (
                                 <Suggestion
                                     key={suggestion.id}
@@ -40,7 +50,14 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                                         handleSelect(suggestion.title)
                                     }
                                 >
-                                    {suggestion.title}
+                                    <span>
+                                        {firstHalf}
+                                        <Prediction>{secondHalf}</Prediction>
+                                        <em> in </em>
+                                        <CategoryId>
+                                            {suggestion.categoryId}
+                                        </CategoryId>
+                                    </span>
                                 </Suggestion>
                             );
                         })}
@@ -90,6 +107,14 @@ const Suggestions = styled.ul`
     &:empty {
         display: none;
     }
+`;
+
+const Prediction = styled.span`
+    font-weight: bold;
+`;
+
+const CategoryId = styled.em`
+    color: purple;
 `;
 
 export default Typeahead;
