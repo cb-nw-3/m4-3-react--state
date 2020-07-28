@@ -54,7 +54,6 @@ const Category = styled.i`
 const BookOption = styled.li`
   line-height: 1.75em;
   list-style-type: none;
-  &
 `;
 
 export default Book;

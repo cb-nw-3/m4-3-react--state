@@ -17,10 +17,6 @@ We're already listening for keypresses, since we're calling the handler when the
 ```jsx
 <input
   onKeyDown={(ev) => {
-    // Switching from if/else to a "switch" statement,
-    // since now we're handling multiple different values for
-    // ev.key. This is an optional change, though; we could
-    // still do it with if/else-if.
     switch (ev.key) {
       case "Enter": {
         handleSelect(ev.target.value);
@@ -83,7 +79,7 @@ Earlier, we suggested adding a hover state to each list item. Let's remove that;
 There is a way to set dynamic styles using the `styled` helper, but inline styles are a simpler strategy in these cases:
 
 ```jsx
-const isSelected = /*
+const isSelected =  /*
   Figure this out, based on the React state
   and the current index in the array */;
 
