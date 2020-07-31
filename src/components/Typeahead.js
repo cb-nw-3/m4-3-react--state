@@ -2,74 +2,49 @@ import React from "react";
 import styled from "styled-components";
 
 import Suggestion from "./Suggestion";
-import BookListing from "./BookListing";
 
 let suggestion_array = [];
 let selectedSuggestionIndex = 0;
 let book_rendered_count = 0;
+let books_suggested;
 function Typeahead({ suggestions }) {
-  //console.log("Typeahead");
-  /// console.log(suggestions);
-
-  const [booklist, setBooks] = React.useState("Books:");
+  const [booklist, setBooks] = React.useState("");
 
   const [textfieldValue, setTextField] = React.useState("");
 
   function findBook(event) {
     suggestion_array = [];
-    console.log(event.target.value);
 
     let bookSearchText = event.target.value.toLowerCase();
-    let books_suggested = suggestions.books.filter((e) =>
+
+    books_suggested = suggestions.books.filter((e) =>
       e.title.toLowerCase().includes(bookSearchText)
     );
 
-    let booklist = "";
-    books_suggested.forEach((element) => {
-      booklist = booklist + element.title + "\n";
-    });
     setTextField(event.target.value);
 
     book_rendered_count = books_suggested.length;
-    books_suggested.forEach((bookFromList, i) => {
-      // console.log("books i");
 
+    books_suggested.forEach((bookFromList, i) => {
       let category_name = Object.values(suggestions.categories).find(
         (element) => element.id === bookFromList.categoryId
       ).name;
 
-      // console.log(i);
-      // console.log(selectedSuggestionIndex);
-
-      if (i === selectedSuggestionIndex) {
-        suggestion_array.push(
-          <Suggestion
-            Book={bookFromList}
-            SearchTerm={event.target.value}
-            isSelected={true}
-            categoryName={category_name}
-          />
-        );
-      } else {
-        suggestion_array.push(
-          <Suggestion
-            Book={bookFromList}
-            SearchTerm={event.target.value}
-            isSelected={false}
-            categoryName={category_name}
-          />
-        );
-      }
+      suggestion_array.push(
+        <Suggestion
+          Book={bookFromList}
+          SearchTerm={event.target.value}
+          isSelected={i === selectedSuggestionIndex}
+          categoryName={category_name}
+        />
+      );
     });
-    // console.log(booklist.length);
-    if (selectedSuggestionIndex > suggestion_array.length - 1) {
-      selectedSuggestionIndex = suggestion_array.length - 1;
-    }
 
     setBooks(suggestion_array);
   }
 
   function handleKeyPress(event) {
+    // console.log(event.key);
     switch (event.key) {
       case "Enter": {
         // handleSelect(ev.target.value);
@@ -80,30 +55,61 @@ function Typeahead({ suggestions }) {
         if (selectedSuggestionIndex < 0) {
           selectedSuggestionIndex = 0;
         }
-        console.log("Arrow up");
-        console.log(selectedSuggestionIndex);
-        // TODO: Handle moving the selection up
         findBook(event);
         return;
       }
       case "ArrowDown": {
-        console.log("Arrow down");
-
         selectedSuggestionIndex = selectedSuggestionIndex + 1;
         if (selectedSuggestionIndex > book_rendered_count - 1) {
           selectedSuggestionIndex = book_rendered_count - 1;
         }
-        console.log(selectedSuggestionIndex);
         findBook(event);
         return;
         // TODO: Handle moving the selection down
       }
+      case "Escape": {
+        clear();
+      }
     }
   }
 
-  function clear(event) {
+  function clear() {
     setTextField("");
     setBooks([]);
+  }
+
+  function HightlightBG(event) {
+    let title_search = event.target.textContent.toLowerCase();
+    let elements = title_search.split(" in");
+
+    if (books_suggested !== undefined) {
+      // console.log(books_suggested[0]);
+      let book_rolled_over = books_suggested.findIndex((e) =>
+        e.title.toLowerCase().includes(elements[0])
+      );
+      //book_of_current_moused_over = books_suggested[book_rolled_over];
+      selectedSuggestionIndex = book_rolled_over;
+
+      suggestion_array = [];
+
+      booklist.forEach((bookE) => {
+        let selected_local = false;
+        if (bookE.props.Book === books_suggested[book_rolled_over]) {
+          selected_local = true;
+        }
+        suggestion_array.push(
+          <Suggestion
+            Book={bookE.props.Book}
+            SearchTerm={bookE.props.SearchTerm}
+            isSelected={selected_local}
+            categoryName={bookE.props.categoryName}
+          />
+        );
+      });
+      setBooks(suggestion_array);
+
+      console.log(book_rolled_over);
+    }
   }
 
   return (
@@ -118,15 +124,13 @@ function Typeahead({ suggestions }) {
         <Button onClick={clear}>Clear</Button>
       </TypeAheadDiv>
       {booklist.length !== 0 ? (
-        <SuggestionDiv>{booklist}</SuggestionDiv>
+        <SuggestionDiv onMouseOver={HightlightBG}>{booklist}</SuggestionDiv>
       ) : (
         <div></div>
       )}
     </div>
   );
 }
-
-export default Typeahead;
 
 const TypeAheadDiv = styled.div`
   display: flex;
@@ -161,3 +165,4 @@ const Button = styled.button`
   outline: 0;
   margin-right: 5px;
 `;
+export default Typeahead;
