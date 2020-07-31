@@ -8,12 +8,7 @@ const App = (props) => {
   return (
     <>
       <GlobalStyles />
-      <Typeahead
-        suggestions={data}
-        handleSelect={(suggestion) => {
-          window.alert(suggestion);
-        }}
-      ></Typeahead>
+      <Typeahead suggestions={data}></Typeahead>
       {/* TODO */}
     </>
   );

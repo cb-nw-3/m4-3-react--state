@@ -47,6 +47,7 @@ function Typeahead({ suggestions }) {
     // console.log(event.key);
     switch (event.key) {
       case "Enter": {
+        selectBook();
         // handleSelect(ev.target.value);
         return;
       }
@@ -112,6 +113,16 @@ function Typeahead({ suggestions }) {
     }
   }
 
+  function selectBook() {
+    let bookSelected = booklist[selectedSuggestionIndex];
+
+    if (bookSelected != undefined) {
+      window.alert(
+        `You selected ${bookSelected.props.Book.title} by ${bookSelected.props.Book.author}`
+      );
+    }
+  }
+
   return (
     <div>
       <TypeAheadDiv>
@@ -124,7 +135,9 @@ function Typeahead({ suggestions }) {
         <Button onClick={clear}>Clear</Button>
       </TypeAheadDiv>
       {booklist.length !== 0 ? (
-        <SuggestionDiv onMouseOver={HightlightBG}>{booklist}</SuggestionDiv>
+        <SuggestionDiv onMouseOver={HightlightBG} onMouseDown={selectBook}>
+          {booklist}
+        </SuggestionDiv>
       ) : (
         <div></div>
       )}
