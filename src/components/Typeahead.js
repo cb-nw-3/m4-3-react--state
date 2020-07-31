@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Suggestion from './Suggestion';
 
 const Typeahead = ({ suggestions, handleSelect }) => {
-    // array destructuring
     const [value, setValue] = React.useState('');
     const matchedSuggestions = suggestions.filter((suggestion) =>
         suggestion.title.toLowerCase().includes(value.toLowerCase())
@@ -18,7 +17,6 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                     placeholder="SEARCH"
                     value={value}
                     onChange={(ev) => {
-                        console.log(ev.target.value);
                         setValue(ev.target.value);
                     }}
                     onKeyDown={(ev) => {
@@ -27,9 +25,7 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                         }
                     }}
                 />
-                <Button onClick={() => setValue('', console.log(value))}>
-                    Clear
-                </Button>
+                <Button onClick={() => setValue('')}>Clear</Button>
                 <Suggestions>
                     {value.length >= 2 &&
                         matchedSuggestions.map((suggestion) => {

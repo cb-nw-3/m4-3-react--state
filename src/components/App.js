@@ -6,8 +6,6 @@ import data from '../data';
 import GlobalStyles from './GlobalStyles';
 import Typeahead from './Typeahead';
 
-console.log(data.books);
-
 const App = (props) => {
     return (
         <>
