@@ -6,7 +6,7 @@ function Typehead ({suggestions, handleSelect}) {
 
     function guessBooks (input){
         if (input.length > 1) {
-            return suggestions.filter(book => book.id.toLowerCase().includes(input.toLowerCase()));
+            return suggestions.filter(book => book.title.toLowerCase().includes(input.toLowerCase()));
         } else {
             return [];
         }
@@ -23,13 +23,18 @@ function Typehead ({suggestions, handleSelect}) {
                 <SuggestionList>
             {
             bookSuggestions.map((book) => {
+                const title = book.title;
+                const indexOfWord = title.toLowerCase().search(value.toLowerCase());
+
                 return(
-                    <Suggestion>{book.id}</Suggestion>
+                    <Suggestion key={book.id}>
+                        <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
+                <i> in </i><Category>{book.categoryId}</Category>
+                    </Suggestion>
                 ); 
             })}
         </SuggestionList>
             )
-
         }
     }
 
@@ -93,9 +98,18 @@ const Suggestion = styled.li`
     padding: 8px;
 `
 
+const Category = styled.span`
+    font-size: 15px;
+    color: fuchsia;
+`
+
 const Break = styled.div`
     flex-basis: 100%;
     height:0px;
+`
+
+const Prediction = styled.span`
+    font-weight: bold;
 `
 
 export default Typehead;
