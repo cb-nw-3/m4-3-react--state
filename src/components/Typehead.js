@@ -12,7 +12,26 @@ function Typehead ({suggestions, handleSelect}) {
         }
     };
     const bookSuggestions = guessBooks(value);
-    console.log(bookSuggestions);
+
+    function List(){
+        if(bookSuggestions.length < 1){
+            return (
+                <div></div>
+                )
+        } else {
+            return(
+                <SuggestionList>
+            {
+            bookSuggestions.map((book) => {
+                return(
+                    <Suggestion>{book.id}</Suggestion>
+                ); 
+            })}
+        </SuggestionList>
+            )
+
+        }
+    }
 
     return (
         <Wrapper>
@@ -28,14 +47,7 @@ function Typehead ({suggestions, handleSelect}) {
             />
             <ClearButton onClick={() => setValue('')}>Clear</ClearButton>
             <Break />
-            <SuggestionList>
-                {
-                bookSuggestions.map((book) => {
-                    return(
-                        <Suggestion>{book.id}</Suggestion>
-                    ); 
-                })}
-            </SuggestionList>
+            {List()}
         </Wrapper>
     );
 }
