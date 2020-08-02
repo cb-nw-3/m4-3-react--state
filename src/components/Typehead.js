@@ -27,7 +27,13 @@ function Typehead ({suggestions, handleSelect}) {
                 const indexOfWord = title.toLowerCase().search(value.toLowerCase());
 
                 return(
-                    <Suggestion key={book.id}>
+                    <Suggestion 
+                    key={book.id}
+                    onClick={() => {
+                        setValue(title);
+                        handleSelect(title);
+                    }}
+                    >
                         <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
                 <i> in </i><Category>{book.categoryId}</Category>
                     </Suggestion>
@@ -96,6 +102,10 @@ const SuggestionList =  styled.ul`
 const Suggestion = styled.li`
     flex-basis:100%;
     padding: 8px;
+    
+    &:hover {
+        background-color: lightskyblue;
+    }
 `
 
 const Category = styled.span`

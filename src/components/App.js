@@ -14,7 +14,7 @@ const App = (props) => {
       <Typehead 
         suggestions={data.books}
         handleSelect={(suggestion) => {
-          window.alert(suggestion)
+          window.alert(`You selected: ${suggestion}`)
         }}
       />
     </>
