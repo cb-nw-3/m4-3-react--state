@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 function Typehead ({suggestions, handleSelect}) {
     const [value, setValue] = React.useState('');
+    const [selectedIndex, setSelectedSuggestion] = React.useState(0);
 
     function guessBooks (input){
         if (input.length > 1) {
@@ -12,6 +13,8 @@ function Typehead ({suggestions, handleSelect}) {
         }
     };
     const bookSuggestions = guessBooks(value);
+    const selectedSuggestion = bookSuggestions[selectedIndex];
+    console.log(selectedSuggestion);
 
     function List(){
         if(bookSuggestions.length < 1){
@@ -26,20 +29,42 @@ function Typehead ({suggestions, handleSelect}) {
                 const title = book.title;
                 const indexOfWord = title.toLowerCase().search(value.toLowerCase());
 
-                return(
-                    <Suggestion 
-                    key={book.id}
-                    onClick={() => {
-                        setValue(title);
-                        handleSelect(title);
-                    }}
-                    >
+
+                // Make this DRY
+                {if(book === selectedSuggestion){
+                    return(
+                        <SelectedSuggestion 
+                        onMouseEnter={() => {
+                            setSelectedSuggestion(bookSuggestions.indexOf(book));
+                        }}
+                        key={book.id}
+                        onClick={() => {
+                            setValue(title);
+                            handleSelect(title);
+                        }}
+                        >
                         <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
-                <i> in </i><Category>{book.categoryId}</Category>
-                    </Suggestion>
-                ); 
-            })}
-        </SuggestionList>
+                        <i> in </i><Category>{book.categoryId}</Category>
+                        </SelectedSuggestion>);
+                } else {
+                    return(
+                        <Suggestion 
+                        key={book.id}
+                        onMouseEnter={() => {
+                            setSelectedSuggestion(bookSuggestions.indexOf(book));
+                        }}
+                        onClick={() => {
+                            setValue(title);
+                            handleSelect(title);
+                        }}
+                        >
+                        <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
+                        <i> in </i><Category>{book.categoryId}</Category>
+                        </Suggestion>
+                    ); 
+                    }}
+                })}
+                </SuggestionList>
             )
         }
     }
@@ -51,8 +76,29 @@ function Typehead ({suggestions, handleSelect}) {
                 value={value}
                 onChange={(event) => setValue(event.target.value)}
                 onKeyDown={(event) => {
-                    if(event.key === 'Enter'){
-                        handleSelect(event.target.value);
+                    switch (event.key) {
+                        case 'Enter': {
+                            handleSelect(event.target.value);
+                            return;
+                        }
+                        case 'ArrowDown': {
+                            if(selectedIndex < bookSuggestions.length - 1){
+                                setSelectedSuggestion(selectedIndex + 1);
+                                return;
+                            } else {
+                                setSelectedSuggestion(bookSuggestions.length - 1)
+                                return;
+                            }
+                        }
+                        case 'ArrowUp': {
+                            if(selectedIndex === 0) {
+                                setSelectedSuggestion(0);
+                                return;
+                            } else {
+                                setSelectedSuggestion(selectedIndex - 1);
+                                return;
+                            }
+                        }
                     }
                 }}
             />
@@ -102,11 +148,15 @@ const SuggestionList =  styled.ul`
 const Suggestion = styled.li`
     flex-basis:100%;
     padding: 8px;
-    
-    &:hover {
-        background-color: lightskyblue;
     }
 `
+const SelectedSuggestion = styled.li`
+        flex-basis:100%;
+        padding: 8px;
+        background-color: lightskyblue;
+
+`
+
 
 const Category = styled.span`
     font-size: 15px;
