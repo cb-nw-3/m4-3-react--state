@@ -30,23 +30,9 @@ function Typehead ({suggestions, handleSelect}) {
                 bookSuggestions.map((book) => {
                     const title = book.title;
                     const indexOfWord = title.toLowerCase().search(value.toLowerCase());
-                    // Make this DRY
-                    {if(book === selectedSuggestion){
-                        return(
-                            <SelectedSuggestion 
-                            onMouseEnter={() => {
-                                setSelectedSuggestion(bookSuggestions.indexOf(book));
-                            }}
-                            key={book.id}
-                            onClick={() => {
-                                setValue(title);
-                                handleSelect(title);
-                            }}
-                            >
-                            <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
-                            <i> in </i><Category>{book.categoryId}</Category>
-                            </SelectedSuggestion>);
-                    } else {
+                    
+                    // I should make this dry...
+                    {if(book !== selectedSuggestion){
                         return(
                             <Suggestion 
                             key={book.id}
@@ -62,6 +48,21 @@ function Typehead ({suggestions, handleSelect}) {
                             <i> in </i><Category>{book.categoryId}</Category>
                             </Suggestion>
                         ); 
+                    } else {
+                        return(
+                            <SelectedSuggestion 
+                            onMouseEnter={() => {
+                                setSelectedSuggestion(bookSuggestions.indexOf(book));
+                            }}
+                            key={book.id}
+                            onClick={() => {
+                                setValue(title);
+                                handleSelect(title);
+                            }}
+                            >
+                            <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
+                            <i> in </i><Category>{book.categoryId}</Category>
+                            </SelectedSuggestion>);
                         }}
                     })}
                     </SuggestionList>
@@ -79,7 +80,10 @@ function Typehead ({suggestions, handleSelect}) {
             <SearchInput
                 type='text'
                 value={value}
-                onChange={(event) => setValue(event.target.value)}
+                onChange={(event) => {
+                    setValue(event.target.value);
+                    setVisible(true);
+                }}
                 onKeyDown={(event) => {
                     switch (event.key) {
                         case 'Enter': {
@@ -157,15 +161,11 @@ const SuggestionList =  styled.ul`
 const Suggestion = styled.li`
     flex-basis:100%;
     padding: 8px;
-    }
 `
-const SelectedSuggestion = styled.li`
-        flex-basis:100%;
-        padding: 8px;
+
+const SelectedSuggestion = styled(Suggestion)`
         background-color: lightskyblue;
-
 `
-
 
 const Category = styled.span`
     font-size: 15px;
