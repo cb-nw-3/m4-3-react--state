@@ -1,12 +1,14 @@
-import React from 'react';
+import React from "react";
+//importing data
+import data from "../data";
+import Typeahead from "./Typeahead";
+import GlobalStyles from "./GlobalStyles";
 
-import GlobalStyles from './GlobalStyles';
-
-const App = (props) => {
+const App = () => {
   return (
     <>
       <GlobalStyles />
-      {/* TODO */}
+      <Typeahead suggestions={data.books} categories={data.categories} />
     </>
   );
 };
