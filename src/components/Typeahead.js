@@ -22,10 +22,12 @@ const Typeahead = ({ suggestions, handleSelect }) => {
   const displayedSuggestions = matchedSuggestions.map((suggestion, index) => {
     const valueIndex =
       suggestion.title.toLowerCase().indexOf(value) + value.length;
+    // indexofvalue is start
     const firstHalf = suggestion.title.toLowerCase().slice(0, valueIndex);
     const secondHalf = suggestion.title.toLowerCase().slice(valueIndex);
     const selectedSuggestion =
       selectedSuggestionIndex === index ? "selected" : "";
+    //whatever suggestion you are on becomes the selected item of the array
     return (
       <Li
         key={suggestion.id}

@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { clamp } from '../utils';
+import { clamp } from "../utils";
 
-import Button from './Button';
-import Suggestion from './Suggestion';
+import Button from "./Button";
+import Suggestion from "./Suggestion";
 
 const Typeahead = ({
   suggestions,
@@ -12,7 +12,7 @@ const Typeahead = ({
   maxResults = 6,
   handleSelect,
 }) => {
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState("");
   const [isVisible, setIsVisible] = React.useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
     0
@@ -42,7 +42,7 @@ const Typeahead = ({
     <Wrapper>
       <Row>
         <Input
-          type='text'
+          type="text"
           value={value}
           onChange={(ev) => {
             setValue(ev.target.value);
@@ -50,20 +50,20 @@ const Typeahead = ({
           onFocus={() => {
             setIsVisible(true);
           }}
-          // onBlur={() => {
-          //   setIsVisible(false);
-          // }}
+          onBlur={() => {
+            setIsVisible(false);
+          }}
           onKeyDown={(ev) => {
             switch (ev.key) {
               // If the user presses the "enter" key, take the currently
               // selected result.
-              case 'Enter': {
+              case "Enter": {
                 handleSelect(selectedSuggestion);
                 return;
               }
 
               // Escape should close the typeahead.
-              case 'Escape': {
+              case "Escape": {
                 setIsVisible(false);
                 return;
               }
@@ -72,8 +72,8 @@ const Typeahead = ({
               // We use arrow keys instead of `tab` so that keyboard users can
               // choose to either enter the list of suggestions, or tab to the
               // rest of the page.
-              case 'ArrowUp':
-              case 'ArrowDown': {
+              case "ArrowUp":
+              case "ArrowDown": {
                 ev.preventDefault();
 
                 // If the user's entry doesn't match any suggestions, there's
@@ -82,7 +82,7 @@ const Typeahead = ({
                   return;
                 }
 
-                const direction = ev.key === 'ArrowDown' ? 'down' : 'up';
+                const direction = ev.key === "ArrowDown" ? "down" : "up";
 
                 // Inherit the current selected index.
                 // We create a copy so that we can modify it without
@@ -90,7 +90,7 @@ const Typeahead = ({
                 let nextSuggestionIndex = selectedSuggestionIndex;
 
                 nextSuggestionIndex =
-                  direction === 'down'
+                  direction === "down"
                     ? nextSuggestionIndex + 1
                     : nextSuggestionIndex - 1;
 
@@ -119,23 +119,23 @@ const Typeahead = ({
             }
           }}
           aria-expanded={isVisible}
-          aria-owns='results'
-          aria-label='Search for a book'
-          aria-describedby='typeahead-instructions'
+          aria-owns="results"
+          aria-label="Search for a book"
+          aria-describedby="typeahead-instructions"
           aria-activedescendant={
             selectedSuggestion ? `option-${selectedSuggestion.id}` : undefined
           }
         />
         <ClearButton
           onClick={() => {
-            setValue('');
+            setValue("");
           }}
         >
           Clear
         </ClearButton>
       </Row>
       {shouldShowSuggestions && (
-        <Suggestions id='results'>
+        <Suggestions id="results">
           {matchedSuggestions.map((suggestion, index) => {
             const category = categories[suggestion.categoryId];
 
@@ -162,7 +162,7 @@ const Typeahead = ({
           })}
         </Suggestions>
       )}
-      <ForScreenReaders id='typeahead-instructions'>
+      <ForScreenReaders id="typeahead-instructions">
         When autocomplete results are available use up and down arrows to review
         and enter to select. Touch device users, explore by touch or with swipe
         gestures.

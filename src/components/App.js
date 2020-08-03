@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
 import data from "../data";
-
 import GlobalStyles from "./GlobalStyles";
 import Typeahead from "./Typeahead";
 
