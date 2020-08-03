@@ -4,6 +4,7 @@ import styled from 'styled-components';
 function Typehead ({suggestions, handleSelect}) {
     const [value, setValue] = React.useState('');
     const [selectedIndex, setSelectedSuggestion] = React.useState(0);
+    const [visible, setVisible] = React.useState('true');
 
     function guessBooks (input){
         if (input.length > 1) {
@@ -22,50 +23,54 @@ function Typehead ({suggestions, handleSelect}) {
                 <div></div>
                 )
         } else {
-            return(
-                <SuggestionList>
-            {
-            bookSuggestions.map((book) => {
-                const title = book.title;
-                const indexOfWord = title.toLowerCase().search(value.toLowerCase());
-
-
-                // Make this DRY
-                {if(book === selectedSuggestion){
-                    return(
-                        <SelectedSuggestion 
-                        onMouseEnter={() => {
-                            setSelectedSuggestion(bookSuggestions.indexOf(book));
+            if (visible){
+                return(
+                    <SuggestionList>
+                {
+                bookSuggestions.map((book) => {
+                    const title = book.title;
+                    const indexOfWord = title.toLowerCase().search(value.toLowerCase());
+                    // Make this DRY
+                    {if(book === selectedSuggestion){
+                        return(
+                            <SelectedSuggestion 
+                            onMouseEnter={() => {
+                                setSelectedSuggestion(bookSuggestions.indexOf(book));
+                            }}
+                            key={book.id}
+                            onClick={() => {
+                                setValue(title);
+                                handleSelect(title);
+                            }}
+                            >
+                            <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
+                            <i> in </i><Category>{book.categoryId}</Category>
+                            </SelectedSuggestion>);
+                    } else {
+                        return(
+                            <Suggestion 
+                            key={book.id}
+                            onMouseEnter={() => {
+                                setSelectedSuggestion(bookSuggestions.indexOf(book));
+                            }}
+                            onClick={() => {
+                                setValue(title);
+                                handleSelect(title);
+                            }}
+                            >
+                            <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
+                            <i> in </i><Category>{book.categoryId}</Category>
+                            </Suggestion>
+                        ); 
                         }}
-                        key={book.id}
-                        onClick={() => {
-                            setValue(title);
-                            handleSelect(title);
-                        }}
-                        >
-                        <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
-                        <i> in </i><Category>{book.categoryId}</Category>
-                        </SelectedSuggestion>);
-                } else {
-                    return(
-                        <Suggestion 
-                        key={book.id}
-                        onMouseEnter={() => {
-                            setSelectedSuggestion(bookSuggestions.indexOf(book));
-                        }}
-                        onClick={() => {
-                            setValue(title);
-                            handleSelect(title);
-                        }}
-                        >
-                        <Prediction>{title.slice(0,indexOfWord)}</Prediction>{value}<Prediction>{title.slice(indexOfWord + value.length)}</Prediction>
-                        <i> in </i><Category>{book.categoryId}</Category>
-                        </Suggestion>
-                    ); 
-                    }}
-                })}
-                </SuggestionList>
-            )
+                    })}
+                    </SuggestionList>
+                )
+            } else {
+                return (
+                    <div></div>
+                    )
+            }
         }
     }
 
@@ -98,6 +103,10 @@ function Typehead ({suggestions, handleSelect}) {
                                 setSelectedSuggestion(selectedIndex - 1);
                                 return;
                             }
+                        }
+                        case 'Escape': {
+                            setVisible(false);
+                            return;
                         }
                     }
                 }}
